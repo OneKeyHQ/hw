@@ -297,3 +297,11 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="celestia",
     )
+    yield NetworkInfo(
+        chainId="kaiyo-1",
+        chainName="Kujira",
+        coinDenom="KUJI",
+        coinMinimalDenom="ukuji",
+        coinDecimals=6,
+        hrp="kujira",
+    )
