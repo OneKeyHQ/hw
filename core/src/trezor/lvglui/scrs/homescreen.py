@@ -19,6 +19,7 @@ from .components.banner import LEVEL, Banner
 from .components.button import ListItemBtn, ListItemBtnWithSwitch, NormalButton
 from .components.container import ContainerFlexCol, ContainerGrid
 from .components.listitem import DisplayItem, ImgGridItem
+from .deviceinfo import DeviceInfoManager
 from .widgets.style import StyleWrapper
 
 
@@ -1471,22 +1472,14 @@ class AboutSetting(Screen):
             self._init = True
         else:
             return
-        model = device.get_model()
-        version = device.get_firmware_version()
-        serial = device.get_serial()
-
-        ble_name = device.get_ble_name() or uart.get_ble_name()
-        ble_version = uart.get_ble_version()
-        # storage = device.get_storage()
-        boot_version = utils.boot_version()
-        board_version = utils.board_version()
+        preloaded_info = DeviceInfoManager.instance().get_info()
         super().__init__(
             prev_scr=prev_scr, title=_(i18n_keys.TITLE__ABOUT_DEVICE), nav_back=True
         )
-
         self.container = ContainerFlexCol(self.content_area, self.title, padding_row=0)
-
-        self.model = DisplayItem(self.container, _(i18n_keys.ITEM__MODEL), model)
+        self.model = DisplayItem(
+            self.container, _(i18n_keys.ITEM__MODEL), preloaded_info["model"]
+        )
         self.model.label.add_style(
             StyleWrapper().text_font(font_PJSREG24).text_color(lv_colors.LIGHT_GRAY), 0
         )
@@ -1496,7 +1489,7 @@ class AboutSetting(Screen):
         self.ble_mac = DisplayItem(
             self.container,
             _(i18n_keys.ITEM__BLUETOOTH_NAME),
-            ble_name,
+            preloaded_info["ble_name"],
         )
         self.ble_mac.label.add_style(
             StyleWrapper().text_font(font_PJSREG24).text_color(lv_colors.LIGHT_GRAY), 0
@@ -1504,19 +1497,8 @@ class AboutSetting(Screen):
         self.ble_mac.label_top.add_style(StyleWrapper().text_color(lv_colors.WHITE), 0)
         self.ble_mac.set_style_bg_color(lv_colors.BLACK, 0)
 
-        # self.storage = DisplayItem(
-        #     self.container,
-        #     _(i18n_keys.ITEM__STORAGE),
-        #     storage,
-        # )
-        # self.storage.label.add_style(
-        #     StyleWrapper().text_font(font_PJSREG24).text_color(lv_colors.LIGHT_GRAY), 0
-        # )
-        # self.storage.label_top.add_style(StyleWrapper().text_color(lv_colors.WHITE), 0)
-        # self.storage.set_style_bg_color(lv_colors.BLACK, 0)
-
         self.version = DisplayItem(
-            self.container, _(i18n_keys.ITEM__SYSTEM_VERSION), version
+            self.container, _(i18n_keys.ITEM__SYSTEM_VERSION), preloaded_info["version"]
         )
         self.version.label.add_style(
             StyleWrapper().text_font(font_PJSREG24).text_color(lv_colors.LIGHT_GRAY), 0
@@ -1527,7 +1509,7 @@ class AboutSetting(Screen):
         self.ble_version = DisplayItem(
             self.container,
             _(i18n_keys.ITEM__BLUETOOTH_VERSION),
-            ble_version,
+            preloaded_info["ble_version"],
         )
         self.ble_version.label.add_style(
             StyleWrapper().text_font(font_PJSREG24).text_color(lv_colors.LIGHT_GRAY), 0
@@ -1538,7 +1520,9 @@ class AboutSetting(Screen):
         self.ble_version.set_style_bg_color(lv_colors.BLACK, 0)
 
         self.boot_version = DisplayItem(
-            self.container, _(i18n_keys.ITEM__BOOTLOADER_VERSION), boot_version
+            self.container,
+            _(i18n_keys.ITEM__BOOTLOADER_VERSION),
+            preloaded_info["boot_version"],
         )
         self.boot_version.label.add_style(
             StyleWrapper().text_font(font_PJSREG24).text_color(lv_colors.LIGHT_GRAY), 0
@@ -1551,7 +1535,7 @@ class AboutSetting(Screen):
         self.board_version = DisplayItem(
             self.container,
             _(i18n_keys.ITEM__BOARDLOADER_VERSION),
-            board_version,
+            preloaded_info["board_version"],
         )
         self.board_version.label.add_style(
             StyleWrapper().text_font(font_PJSREG24).text_color(lv_colors.LIGHT_GRAY), 0
@@ -1570,7 +1554,7 @@ class AboutSetting(Screen):
         self.build_id.set_style_bg_color(lv_colors.BLACK, 0)
 
         self.serial = DisplayItem(
-            self.container, _(i18n_keys.ITEM__SERIAL_NUMBER), serial
+            self.container, _(i18n_keys.ITEM__SERIAL_NUMBER), preloaded_info["serial"]
         )
         self.serial.label.add_style(
             StyleWrapper().text_font(font_PJSREG24).text_color(lv_colors.LIGHT_GRAY), 0

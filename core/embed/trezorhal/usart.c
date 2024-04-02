@@ -13,7 +13,8 @@
 UART_HandleTypeDef uart;
 UART_HandleTypeDef *huart = &uart;
 
-uint8_t usart_fifo[64] = {0};
+#define UART_PACKET_MAX_LEN 64
+uint8_t usart_fifo[UART_PACKET_MAX_LEN] = {0};
 uint8_t usart_fifo_len = 0;
 
 uint8_t uart_data_in[UART_BUF_MAX_LEN];
@@ -140,7 +141,7 @@ static void usart_rev_package(uint8_t *buf) {
     return;
   }
   len = (p_buf[0] << 8) + p_buf[1];
-  if (len > 32) {
+  if (len > UART_PACKET_MAX_LEN) {
     return;
   }
   p_buf += 2;

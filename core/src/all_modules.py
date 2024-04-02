@@ -217,6 +217,8 @@ trezor.lvglui.scrs.components.theme
 import trezor.lvglui.scrs.components.theme
 trezor.lvglui.scrs.components.transition
 import trezor.lvglui.scrs.components.transition
+trezor.lvglui.scrs.deviceinfo
+import trezor.lvglui.scrs.deviceinfo
 trezor.lvglui.scrs.homescreen
 import trezor.lvglui.scrs.homescreen
 trezor.lvglui.scrs.initscreen
