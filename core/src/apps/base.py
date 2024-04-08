@@ -160,7 +160,7 @@ def get_onekey_features() -> OnekeyFeatures:
         onekey_boot_build_id=utils.boot_build_id(),
         onekey_firmware_version=utils.ONEKEY_VERSION,
         onekey_firmware_build_id=utils.BUILD_ID[-7:].decode(),
-        onekey_firmware_hash=utils.firmware_hash(),
+        onekey_firmware_hash=utils.onekey_firmware_hash(),
         onekey_ble_name=uart.get_ble_name(),
         onekey_ble_version=uart.get_ble_version(),
         onekey_ble_build_id=uart.get_ble_build_id(),
