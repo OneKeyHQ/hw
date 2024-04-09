@@ -344,6 +344,10 @@ const char *languages[][2] = {
     {"Do you want to enable\npassphrase protection?",
      "要启用 passphrase 加密吗?"},
     {"Do you want to encrypt\nNostr message?", "确认要加密本次 Nostr 消息吗?"},
+    // fsm_msg_dynex.h
+    {"Do you want to export the\ntracking key of the address?",
+     "您是否想要导出此地址的跟\n踪密钥 ?"},
+    // fsm_msg_common.h
     {"Do you want to restart", "确定要重启设备并进入更新"},
     // menu_list.c
     {"Do you want to restore the\ninput direction to default?",
@@ -417,6 +421,8 @@ const char *languages[][2] = {
     {"Error computing multisig fingerprint", ""},
     //
     {"Exit", "退出"},
+    // fsm_msg_dynex.h
+    {"Export Dnx tracking key", "导出Dnx跟踪密钥"},
     {"FIRMWARE:", "固件版本:"},
     // signing.c signing.c signing.c signing.c
     // signing.c

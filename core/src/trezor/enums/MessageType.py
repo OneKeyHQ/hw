@@ -355,3 +355,12 @@ if not utils.BITCOIN_ONLY:
     NervosSignedTx = 11704
     NervosTxRequest = 11705
     NervosTxAck = 11706
+    DnxGetAddress = 11800
+    DnxAddress = 11801
+    DnxSignTx = 11802
+    DnxInputRequest = 11803
+    DnxInputAck = 11804
+    DnxRTSigsRequest = 11805
+    DnxSignedTx = 11806
+    DnxGetTrackingKey = 11807
+    DnxTrackingKey = 11808

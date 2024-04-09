@@ -256,6 +256,12 @@ static inline void oledClear_ex(void) {
   layoutStatusLogoEx(false, true);
 #endif
 }
+static inline void oledClear_ext(int x, int y) {
+  oledClearFrom_x_y(x, y);
+#if !EMULATOR
+  layoutStatusLogoEx(false, true);
+#endif
+}
 
 #if DEBUG_LINK
 #define layoutSwipe oledClear
@@ -307,5 +313,4 @@ bool layoutPaginated(const char *title, const uint8_t *data, uint16_t len);
 
 void onboarding(uint8_t key);
 void hide_icons(bool hide);
-
 #endif

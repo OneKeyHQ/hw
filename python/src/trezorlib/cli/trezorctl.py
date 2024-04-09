@@ -43,6 +43,7 @@ from . import (
     crypto,
     debug,
     device,
+    dnx,
     eos,
     ethereum,
     fido,
@@ -108,6 +109,7 @@ COMMAND_ALIASES = {
     "kaspa": kaspa.cli,
     "sui": sui.cli,
     "nervos": nervos.cli,
+    "dnx": dnx.cli,
     # firmware aliases:
     "fw": firmware.cli,
     "update-firmware": firmware.update,
@@ -457,6 +459,7 @@ cli.add_command(sol.cli)
 cli.add_command(kaspa.cli)
 cli.add_command(sui.cli)
 cli.add_command(nervos.cli)
+cli.add_command(dnx.cli)
 
 #
 # Main

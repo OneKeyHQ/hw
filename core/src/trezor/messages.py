@@ -3470,6 +3470,180 @@ if TYPE_CHECKING:
         def is_type_of(cls, msg: Any) -> TypeGuard["DebugLinkWatchLayout"]:
             return isinstance(msg, cls)
 
+    class DnxGetAddress(protobuf.MessageType):
+        address_n: "list[int]"
+        show_display: "bool | None"
+
+        def __init__(
+            self,
+            *,
+            address_n: "list[int] | None" = None,
+            show_display: "bool | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxGetAddress"]:
+            return isinstance(msg, cls)
+
+    class DnxAddress(protobuf.MessageType):
+        address: "str | None"
+
+        def __init__(
+            self,
+            *,
+            address: "str | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxAddress"]:
+            return isinstance(msg, cls)
+
+    class DnxSignTx(protobuf.MessageType):
+        address_n: "list[int]"
+        inputs_count: "int"
+        to_address: "str"
+        amount: "int"
+        fee: "int"
+        payment_id: "bytes | None"
+
+        def __init__(
+            self,
+            *,
+            inputs_count: "int",
+            to_address: "str",
+            amount: "int",
+            fee: "int",
+            address_n: "list[int] | None" = None,
+            payment_id: "bytes | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxSignTx"]:
+            return isinstance(msg, cls)
+
+    class DnxInputRequest(protobuf.MessageType):
+        request_index: "int | None"
+        tx_key: "DnxTxKey | None"
+        computed_key_image: "DnxComputedKeyImage | None"
+
+        def __init__(
+            self,
+            *,
+            request_index: "int | None" = None,
+            tx_key: "DnxTxKey | None" = None,
+            computed_key_image: "DnxComputedKeyImage | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxInputRequest"]:
+            return isinstance(msg, cls)
+
+    class DnxInputAck(protobuf.MessageType):
+        prev_index: "int"
+        global_index: "int"
+        tx_pubkey: "bytes"
+        prev_out_pubkey: "bytes"
+        amount: "int"
+
+        def __init__(
+            self,
+            *,
+            prev_index: "int",
+            global_index: "int",
+            tx_pubkey: "bytes",
+            prev_out_pubkey: "bytes",
+            amount: "int",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxInputAck"]:
+            return isinstance(msg, cls)
+
+    class DnxRTSigsRequest(protobuf.MessageType):
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxRTSigsRequest"]:
+            return isinstance(msg, cls)
+
+    class DnxSignedTx(protobuf.MessageType):
+        signatures: "list[bytes]"
+        output_keys: "list[bytes]"
+
+        def __init__(
+            self,
+            *,
+            signatures: "list[bytes] | None" = None,
+            output_keys: "list[bytes] | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxSignedTx"]:
+            return isinstance(msg, cls)
+
+    class DnxGetTrackingKey(protobuf.MessageType):
+        address_n: "list[int]"
+
+        def __init__(
+            self,
+            *,
+            address_n: "list[int] | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxGetTrackingKey"]:
+            return isinstance(msg, cls)
+
+    class DnxTrackingKey(protobuf.MessageType):
+        tracking_key: "bytes"
+
+        def __init__(
+            self,
+            *,
+            tracking_key: "bytes",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxTrackingKey"]:
+            return isinstance(msg, cls)
+
+    class DnxTxKey(protobuf.MessageType):
+        ephemeral_tx_sec_key: "bytes | None"
+        ephemeral_tx_pub_key: "bytes | None"
+
+        def __init__(
+            self,
+            *,
+            ephemeral_tx_sec_key: "bytes | None" = None,
+            ephemeral_tx_pub_key: "bytes | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxTxKey"]:
+            return isinstance(msg, cls)
+
+    class DnxComputedKeyImage(protobuf.MessageType):
+        key_image: "bytes | None"
+
+        def __init__(
+            self,
+            *,
+            key_image: "bytes | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["DnxComputedKeyImage"]:
+            return isinstance(msg, cls)
+
     class EosGetPublicKey(protobuf.MessageType):
         address_n: "list[int]"
         show_display: "bool | None"

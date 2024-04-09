@@ -521,7 +521,16 @@ enum MessageType {
     MessageType_NervosTxRequest = 11705 [(wire_out) = true];
     MessageType_NervosTxAck = 11706 [(wire_in) = true];
 
-
+    // dnx
+    MessageType_DnxGetAddress = 11800 [(wire_in) = true];
+    MessageType_DnxAddress = 11801 [(wire_out) = true];
+    MessageType_DnxSignTx = 11802 [(wire_in) = true];
+    MessageType_DnxInputRequest = 11803 [(wire_out) = true];
+    MessageType_DnxInputAck = 11804 [(wire_in) = true];
+    MessageType_DnxRTSigsRequest = 11805 [(wire_in) = true];
+    MessageType_DnxSignedTx = 11806 [(wire_out) = true];
+    MessageType_DnxGetTrackingKey = 11807 [(wire_in) = true];
+    MessageType_DnxTrackingKey = 11808 [(wire_out) = true];
     //onekey
     MessageType_DeviceEraseSector= 10026 [deprecated = true];
 

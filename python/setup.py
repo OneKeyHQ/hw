@@ -60,7 +60,7 @@ setup(
     package_data={"trezorlib": ["py.typed"]},
     packages=find_packages("src"),
     package_dir={"": "src"},
-    entry_points={"console_scripts": ["trezorctl=trezorlib.cli.trezorctl:cli"]},
+    entry_points={"console_scripts": ["onekeyctl=trezorlib.cli.trezorctl:cli"]},
     install_requires=install_requires,
     extras_require=extras_require,
     python_requires=">=3.6",

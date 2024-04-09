@@ -1,0 +1,107 @@
+syntax = "proto2";
+package hw.trezor.messages.dynex;
+
+// Sugar for easier handling in Java
+option java_package = "com.satoshilabs.trezor.lib.protobuf";
+option java_outer_classname = "TrezorMessageDynex";
+
+/**
+ * Request: Address at the specified index
+ * @start
+ * @next DnxAddress
+ */
+message DnxGetAddress {
+    repeated uint32 address_n = 1;              // BIP-32 path to derive the key from master node
+    optional bool show_display = 2;             // optionally show on display before sending the result
+}
+
+/**
+ * Response: Address for the given index
+ * @end
+ */
+message DnxAddress {
+    optional string address = 1;                // Dnx address as hex-encoded string
+}
+
+/**
+ * Request: Sign a transaction
+ * @start
+ * @next DnxInputRequest
+ */
+message DnxSignTx {
+     repeated uint32 address_n = 1;              // BIP-32 path to derive the key from master node
+     required uint32 inputs_count = 2;           // number of transaction inputs
+     required string to_address = 3;             // address to send to
+     required uint64 amount = 4;                 // amount to send in nanoDnx
+     required uint64 fee = 5;                    // fee to pay in nanoDnx
+     optional bytes payment_id = 6;              // payment ID to use for the transaction
+ }
+
+ /**
+  * Request: Ask client for corresponding input details
+  * @start
+  * @next DnxInputAck
+  */
+ message DnxInputRequest {
+     optional uint32 request_index = 1;
+     optional DnxTxKey tx_key = 2;
+     optional DnxComputedKeyImage computed_key_image = 3;
+     message DnxTxKey {
+        optional bytes ephemeral_tx_sec_key = 1;
+        optional bytes ephemeral_tx_pub_key = 2;
+     }
+     message DnxComputedKeyImage {
+        optional bytes key_image = 1;
+    }
+ }
+
+/**
+ * Response: Input details
+ * @next DnxInputRequest
+ * @end
+ *
+**/
+message DnxInputAck {
+    required uint32 prev_index = 1;
+    required uint32 global_index = 2;
+    required bytes tx_pubkey = 3;
+    required bytes prev_out_pubkey = 4;
+    required uint64 amount = 5;
+}
+
+/**
+ * Request: requset for signature and output key
+ * @start
+ * @next DnxSignedTx
+ */
+message DnxRTSigsRequest {
+
+}
+
+
+/**
+ * Response: Signature and output key
+ * @end
+ *
+**/
+message DnxSignedTx {
+    repeated bytes signatures = 1;
+    repeated bytes output_keys = 2;
+}
+
+/**
+ * Request: Get the tracking key for the given address to generate the reserve proof
+ * @start
+ * @next DnxTrackingKey
+ */
+message DnxGetTrackingKey {
+    repeated uint32 address_n = 1;              // BIP-32 path to derive the key from master node
+}
+
+/**
+ * Response: Tracking key for the given address
+ * @end
+ */
+message DnxTrackingKey {
+    required bytes tracking_key = 1;            // tracking key for the given address
+}

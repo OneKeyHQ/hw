@@ -139,6 +139,7 @@ OBJS += nostr.o
 OBJS += base64.o
 OBJS += lnurl.o
 OBJS += nervos.o
+OBJS += dynex.o
 endif
 
 OBJS += debug.o
@@ -199,6 +200,9 @@ OBJS += ../vendor/trezor-crypto/cardano.o
 
 OBJS += ../vendor/trezor-crypto/sha512.o
 OBJS += ../vendor/trezor-crypto/schnorr_bch.o
+OBJS += ../vendor/trezor-crypto/monero/base58.o
+OBJS += ../vendor/trezor-crypto/monero/xmr.o
+OBJS += ../vendor/trezor-crypto/monero/serialize.o
 
 OBJS += ../vendor/QR-Code-generator/c/qrcodegen.o
 
@@ -241,6 +245,7 @@ OBJS += protob/messages-nexa.pb.o
 OBJS += protob/messages-nostr.pb.o
 OBJS += protob/messages-lnurl.pb.o
 OBJS += protob/messages-nervos.pb.o
+OBJS += protob/messages-dynex.pb.o
 endif
 
 OPTFLAGS ?= -Os
@@ -264,7 +269,8 @@ CFLAGS += -Wno-sequence-point
 CFLAGS += -I../vendor/nanopb -Iprotob -DPB_FIELD_16BIT=1 -DPB_ENCODE_ARRAYS_UNPACKED=1 -DPB_VALIDATE_UTF8=1
 CFLAGS += -DSCM_REVISION='"$(shell git rev-parse HEAD | sed 's:\(..\):\\x\1:g')"'
 CFLAGS += -DBUILD_ID='"$(NAME)"'
-CFLAGS += -DUSE_MONERO=0
+CFLAGS += -DUSE_KECCAK=1
+CFLAGS += -DUSE_MONERO=1
 ifneq ($(BITCOIN_ONLY),1)
 CFLAGS += -DUSE_ETHEREUM=1
 CFLAGS += -DUSE_NEM=1

@@ -124,6 +124,7 @@ const char *address_n_str(const uint32_t *address_n, size_t address_n_count,
 // split longer string into 6 rows, rowlen chars each
 const char **split_message(const uint8_t *msg, uint32_t len, uint32_t rowlen) {
   static char str[6][32 + 1];
+  memzero(str, sizeof(str));
   if (rowlen > 32) {
     rowlen = 32;
   }

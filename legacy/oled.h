@@ -87,5 +87,5 @@ void oledSwipeLeft(void);
 void oledSwipeRight(void);
 void oledSCA(int y1, int y2, int val);
 void oledSCAInside(int y1, int y2, int val, int a, int b);
-
+void oledClearFrom_x_y(int x, int y);
 #endif

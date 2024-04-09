@@ -1,0 +1,16 @@
+DnxGetAddress.address_n                                   max_count:8
+DnxAddress.address                                        max_size:98
+
+DnxSignTx.address_n                                       max_count:8
+DnxSignTx.to_address                                      max_size:98
+DnxSignTx.payment_id                                      max_size:32
+DnxTxKey.ephemeral_tx_sec_key                             max_size:32
+DnxTxKey.ephemeral_tx_pub_key                             max_size:32
+
+DnxInputAck.tx_pubkey                                     max_size:32
+DnxInputAck.prev_out_pubkey                               max_size:32
+DnxComputedKeyImage.key_image                             max_size:32
+DnxSignedTx.signatures                                    max_count:10 max_size:64
+DnxSignedTx.output_keys                                   max_count:2 max_size:32
+DnxGetTrackingKey.address_n                               max_count:8
+DnxTrackingKey.tracking_key                               max_size: 128
