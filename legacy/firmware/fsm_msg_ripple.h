@@ -16,12 +16,15 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#undef COIN_TYPE
+#define COIN_TYPE 144
 void fsm_msgRippleGetAddress(RippleGetAddress *msg) {
   RESP_INIT(RippleAddress);
 
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
   CHECK_PIN
 
   HDNode *node = fsm_getDerivedNode(SECP256K1_NAME, msg->address_n,
@@ -54,7 +57,9 @@ void fsm_msgRippleSignTx(RippleSignTx *msg) {
   RESP_INIT(RippleSignedTx);
 
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
   CHECK_PIN
 
   HDNode *node = fsm_getDerivedNode(SECP256K1_NAME, msg->address_n,

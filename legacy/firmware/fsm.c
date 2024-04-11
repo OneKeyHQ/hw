@@ -565,6 +565,36 @@ bool fsm_layoutPathWarning(uint32_t address_n_count,
   return true;
 }
 
+bool fsm_common_path_check(const uint32_t *address_n, uint32_t address_n_count,
+                           uint32_t slip44_id, const char *curve_name,
+                           bool strict) {
+  if (address_n == NULL || curve_name == NULL) {
+    return false;
+  }
+  if (address_n_count < 3) {
+    return false;
+  }
+  bool purpose_is_hardened = (address_n[0] & PATH_HARDENED) != 0;
+  bool coin_type_is_expected = (address_n[1] == (slip44_id | PATH_HARDENED));
+  bool account_is_hardened = (address_n[2] & PATH_HARDENED) != 0;
+  if (!purpose_is_hardened || !coin_type_is_expected || !account_is_hardened) {
+    return false;
+  }
+  if (strict) {
+    if ((address_n[0] != (44 | PATH_HARDENED))) {
+      return false;
+    }
+  }
+  if (strcmp(curve_name, ED25519_NAME) == 0) {
+    for (uint32_t i = 3; i < address_n_count; i++) {
+      if ((address_n[i] & PATH_HARDENED) == 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 #include "fsm_msg_coin.h"
 #include "fsm_msg_common.h"
 #include "fsm_msg_crypto.h"

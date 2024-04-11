@@ -11,7 +11,6 @@ void nexa_sign_sighash(HDNode *node, const uint8_t *raw_message,
                        pb_size_t *signature_len);
 void nexa_signing_init(const NexaSignTx *msg);
 void nexa_signing_abort(void);
-bool nexa_path_check(uint32_t address_n_count, const uint32_t *address_n);
 
 extern uint16_t input_count_nexa;
 extern uint16_t input_index_nexa;

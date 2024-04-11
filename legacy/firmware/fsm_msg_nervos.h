@@ -16,9 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#undef COIN_TYPE
+#define COIN_TYPE 309
 void fsm_msgNervosGetAddress(const NervosGetAddress *msg) {
   CHECK_INITIALIZED
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
   CHECK_PIN
   RESP_INIT(NervosAddress);
   if (strcmp(msg->network, "ckt") != 0 && strcmp(msg->network, "ckb") != 0) {
@@ -49,6 +53,9 @@ void fsm_msgNervosGetAddress(const NervosGetAddress *msg) {
 
 void fsm_msgNervosSignTx(const NervosSignTx *msg) {
   CHECK_INITIALIZED
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
   CHECK_PIN
   RESP_INIT(NervosSignedTx);
   if (strcmp(msg->network, "ckt") != 0 && strcmp(msg->network, "ckb") != 0) {

@@ -16,28 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-static bool fsm_nexa_CheckPath(uint32_t address_n_count,
-                               const uint32_t *address_n) {
-  if (nexa_path_check(address_n_count, address_n)) {
-    return true;
-  }
-  if (config_getSafetyCheckLevel() == SafetyCheckLevel_Strict) {
-    fsm_sendFailure(FailureType_Failure_DataError, _("Forbidden key path"));
-    return false;
-  }
-
-  return fsm_layoutPathWarning(address_n_count, address_n);
-}
-
+#undef COIN_TYPE
+#define COIN_TYPE 29223
 void fsm_msgNexaGetAddress(const NexaGetAddress *msg) {
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
   CHECK_PIN
 
   RESP_INIT(NexaAddress);
 
-  fsm_nexa_CheckPath(msg->address_n_count, msg->address_n);
   HDNode *node = fsm_getDerivedNode(SECP256K1_NAME, msg->address_n,
                                     msg->address_n_count, NULL);
   if (!node) return;
@@ -61,7 +50,9 @@ void fsm_msgNexaGetAddress(const NexaGetAddress *msg) {
 }
 
 #define SIGN_DYNAMIC_NEXA                                                  \
-  fsm_nexa_CheckPath(msg->address_n_count, msg->address_n);                \
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,  \
+                                    COIN_TYPE, SECP256K1_NAME, true),      \
+              "Invalid path");                                             \
   HDNode *node = fsm_getDerivedNode(SECP256K1_NAME, msg->address_n,        \
                                     msg->address_n_count, NULL);           \
   if (!node) return;                                                       \

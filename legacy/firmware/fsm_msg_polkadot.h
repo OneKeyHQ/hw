@@ -17,9 +17,13 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#undef COIN_TYPE
+#define COIN_TYPE 354
 void fsm_msgPolkadotGetAddress(PolkadotGetAddress *msg) {
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
   CHECK_PIN
 
   RESP_INIT(PolkadotAddress);
@@ -77,7 +81,9 @@ void fsm_msgPolkadotGetAddress(PolkadotGetAddress *msg) {
 
 void fsm_msgPolkadotSignTx(const PolkadotSignTx *msg) {
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
   CHECK_PIN
 
   RESP_INIT(PolkadotSignedTx);

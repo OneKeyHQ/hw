@@ -16,9 +16,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+#undef COIN_TYPE
+#define COIN_TYPE 283
 
 void fsm_msgAlgorandGetAddress(AlgorandGetAddress *msg) {
   CHECK_INITIALIZED
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
 
   CHECK_PIN
 
@@ -48,7 +53,9 @@ void fsm_msgAlgorandSignTx(const AlgorandSignTx *msg) {
   CHECK_INITIALIZED
 
   CHECK_PIN
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
   RESP_INIT(AlgorandSignedTx);
 
   HDNode *node = fsm_getDerivedNode(ED25519_NAME, msg->address_n,

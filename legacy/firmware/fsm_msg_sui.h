@@ -16,10 +16,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#undef COIN_TYPE
+#define COIN_TYPE 784
 void fsm_msgSuiGetAddress(const SuiGetAddress *msg) {
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
   CHECK_PIN
 
   RESP_INIT(SuiAddress);
@@ -49,7 +52,9 @@ void fsm_msgSuiGetAddress(const SuiGetAddress *msg) {
 
 void fsm_msgSuiSignTx(const SuiSignTx *msg) {
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
   CHECK_PIN
 
   RESP_INIT(SuiSignedTx);
@@ -75,11 +80,13 @@ void fsm_msgSuiTxAck(SuiTxAck *msg) {
 }
 
 void fsm_msgSuiSignMessage(SuiSignMessage *msg) {
-  RESP_INIT(SuiMessageSignature);
-
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
   CHECK_PIN
+
+  RESP_INIT(SuiMessageSignature);
 
   HDNode *node = fsm_getDerivedNode(ED25519_NAME, msg->address_n,
                                     msg->address_n_count, NULL);

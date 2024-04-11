@@ -17,8 +17,13 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#undef COIN_TYPE
+#define COIN_TYPE 637
 void fsm_msgAptosGetAddress(const AptosGetAddress *msg) {
   CHECK_INITIALIZED
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
 
   CHECK_PIN
 
@@ -48,6 +53,10 @@ void fsm_msgAptosGetAddress(const AptosGetAddress *msg) {
 void fsm_msgAptosSignTx(const AptosSignTx *msg) {
   CHECK_INITIALIZED
 
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
+
   CHECK_PIN
 
   RESP_INIT(AptosSignedTx);
@@ -65,6 +74,9 @@ void fsm_msgAptosSignTx(const AptosSignTx *msg) {
 
 void fsm_msgAptosSignMessage(const AptosSignMessage *msg) {
   CHECK_INITIALIZED
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_NAME, true),
+              "Invalid path");
 
   CHECK_PIN
   RESP_INIT(AptosMessageSignature)

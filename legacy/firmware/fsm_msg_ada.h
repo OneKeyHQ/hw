@@ -16,17 +16,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+#undef COIN_TYPE
+#define COIN_TYPE 1815
 
 void fsm_msgCardanoGetPublicKey(CardanoGetPublicKey *msg) {
   RESP_INIT(CardanoPublicKey);
 
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_CARDANO_NAME, false),
+              "Invalid path");
   CHECK_PIN
 
   if (msg->derivation_type != CardanoDerivationType_ICARUS) {
     fsm_sendFailure(FailureType_Failure_ProcessError,
-                    _("Only support ICARUS scheme"));
+                    "Only support ICARUS scheme");
     return;
   }
   HDNode node = {0};
@@ -53,21 +57,37 @@ void fsm_msgCardanoGetPublicKey(CardanoGetPublicKey *msg) {
 }
 
 void fsm_msgCardanoGetAddress(CardanoGetAddress *msg) {
-  RESP_INIT(CardanoAddress);
-
   CHECK_INITIALIZED
+
+  CHECK_PARAM((msg->address_parameters.address_n_count != 0 ||
+               msg->address_parameters.address_n_staking_count != 0),
+              "Invalid path params");
+  if (msg->address_parameters.address_n_count > 0) {
+    CHECK_PARAM(fsm_common_path_check(msg->address_parameters.address_n,
+                                      msg->address_parameters.address_n_count,
+                                      COIN_TYPE, ED25519_CARDANO_NAME, false),
+                "Invalid path");
+  }
+  if (msg->address_parameters.address_n_staking_count > 0) {
+    CHECK_PARAM(
+        fsm_common_path_check(msg->address_parameters.address_n_staking,
+                              msg->address_parameters.address_n_staking_count,
+                              COIN_TYPE, ED25519_CARDANO_NAME, false),
+        "Invalid path");
+  }
 
   CHECK_PIN
 
+  RESP_INIT(CardanoAddress);
   if (msg->derivation_type != CardanoDerivationType_ICARUS) {
     fsm_sendFailure(FailureType_Failure_ProcessError,
-                    _("Only support ICARUS scheme"));
+                    "Only support ICARUS scheme");
     return;
   }
 
   if (!ada_get_address(msg, resp->address)) {
     fsm_sendFailure(FailureType_Failure_ProcessError,
-                    _("Deriving address failed"));
+                    "Deriving address failed");
     layoutHome();
     return;
   }
@@ -108,6 +128,9 @@ void fsm_msgCardanoTxWitnessRequest(CardanoTxWitnessRequest *msg) {
 void fsm_msgCardanoTxHostAck(void) { cardano_txack(); }
 
 void fsm_msgCardanoSignTxInit(CardanoSignTxInit *msg) {
+  CHECK_INITIALIZED
+
+  CHECK_PIN
   if (!_processs_tx_init(msg)) {
     layoutHome();
   }
@@ -136,7 +159,7 @@ void fsm_msgCardanoToken(CardanoToken *msg) {
 void fsm_msgCardanoTxCertificate(CardanoTxCertificate *msg) {
   if (!txHashBuilder_addCertificate(msg)) {
     fsm_sendFailure(FailureType_Failure_ProcessError,
-                    _("Invalid Certificate request"));
+                    "Invalid Certificate request");
     layoutHome();
     return;
   }
@@ -146,7 +169,7 @@ void fsm_msgCardanoTxCertificate(CardanoTxCertificate *msg) {
 void fsm_msgCardanoTxWithdrawal(CardanoTxWithdrawal *msg) {
   if (!txHashBuilder_addWithdrawal(msg)) {
     fsm_sendFailure(FailureType_Failure_ProcessError,
-                    _("Invalid Withdrawal request"));
+                    "Invalid Withdrawal request");
     layoutHome();
     return;
   }
@@ -156,7 +179,7 @@ void fsm_msgCardanoTxWithdrawal(CardanoTxWithdrawal *msg) {
 void fsm_msgCardanoTxAuxiliaryData(CardanoTxAuxiliaryData *msg) {
   if (!txHashBuilder_addAuxiliaryData(msg)) {
     fsm_sendFailure(FailureType_Failure_ProcessError,
-                    _("Invalid AuxiliaryData request"));
+                    "Invalid AuxiliaryData request");
     layoutHome();
     return;
   }
@@ -200,10 +223,13 @@ void fsm_msgCardanoSignMessage(CardanoSignMessage *msg) {
 
   CHECK_INITIALIZED
 
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, ED25519_CARDANO_NAME, false),
+              "Invalid path");
   CHECK_PIN
 
   if ((msg->network_id != 0) && (msg->network_id != 1)) {
-    fsm_sendFailure(FailureType_Failure_ProcessError, _("Invalid Networ ID"));
+    fsm_sendFailure(FailureType_Failure_ProcessError, "Invalid Networ ID");
     return;
   }
   HDNode node = {0};

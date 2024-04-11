@@ -17,9 +17,13 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#undef COIN_TYPE
+#define COIN_TYPE 111111
 void fsm_msgKaspaGetAddress(const KaspaGetAddress *msg) {
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
   CHECK_PIN
 
   RESP_INIT(KaspaAddress);
@@ -53,6 +57,9 @@ void fsm_msgKaspaGetAddress(const KaspaGetAddress *msg) {
 }
 
 #define SIGN_DYNAMIC                                                        \
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,   \
+                                    COIN_TYPE, SECP256K1_NAME, true),       \
+              "Invalid path");                                              \
   HDNode *node = fsm_getDerivedNode(SECP256K1_NAME, msg->address_n,         \
                                     msg->address_n_count, NULL);            \
   if (!node) return;                                                        \

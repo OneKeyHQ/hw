@@ -17,8 +17,13 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#undef COIN_TYPE
+#define COIN_TYPE 503
 void fsm_msgConfluxSignTx(ConfluxSignTx *msg) {
   CHECK_INITIALIZED
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
 
   CHECK_PIN
 
@@ -37,6 +42,9 @@ void fsm_msgConfluxGetAddress(const ConfluxGetAddress *msg) {
   RESP_INIT(ConfluxAddress);
 
   CHECK_INITIALIZED
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
 
   CHECK_PIN
 
@@ -72,6 +80,9 @@ void fsm_msgConfluxSignMessage(const ConfluxSignMessage *msg) {
   RESP_INIT(ConfluxMessageSignature);
 
   CHECK_INITIALIZED
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
 
   if (!fsm_layoutSignMessage(msg->message.bytes, msg->message.size)) {
     fsm_sendFailure(FailureType_Failure_ActionCancelled, NULL);
@@ -93,7 +104,9 @@ void fsm_msgConfluxSignMessageCIP23(const ConfluxSignMessageCIP23 *msg) {
   RESP_INIT(ConfluxMessageSignature);
 
   CHECK_INITIALIZED
-
+  CHECK_PARAM(fsm_common_path_check(msg->address_n, msg->address_n_count,
+                                    COIN_TYPE, SECP256K1_NAME, true),
+              "Invalid path");
   if (msg->domain_hash.size != 32 || msg->message_hash.size != 32) {
     fsm_sendFailure(FailureType_Failure_ProcessError, "data length error");
     return;

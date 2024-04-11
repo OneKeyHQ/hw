@@ -130,15 +130,3 @@ void nexa_sign_sighash(HDNode *node, const uint8_t *raw_message,
   }
   *signature_len = 64;
 }
-
-bool nexa_path_check(uint32_t address_n_count, const uint32_t *address_n) {
-  if (address_n_count < 5) {
-    return false;
-  }
-  if (address_n[0] != (PATH_HARDENED | 44) ||
-      address_n[1] != (PATH_HARDENED | 29223) ||
-      (address_n[2] < PATH_HARDENED)) {
-    return false;
-  }
-  return true;
-}
