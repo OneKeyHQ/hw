@@ -130,7 +130,7 @@ def get_features() -> Features:
         f.unfinished_backup = storage.device.unfinished_backup()
         f.no_backup = storage.device.no_backup()
         f.flags = storage.device.get_flags()
-        f.recovery_mode = storage.recovery.is_in_progress()
+        f.recovery_mode = False  # storage.recovery.is_in_progress()
         f.backup_type = mnemonic.get_type()
         f.sd_protection = storage.sd_salt.is_enabled()
         f.wipe_code_protection = config.has_wipe_code()
