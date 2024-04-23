@@ -265,41 +265,6 @@ void fsm_msgEthereumVerifyMessageOneKey(
 
   layoutHome();
 }
-void fsm_msgEthereumSignMessageEIP712(const EthereumSignMessageEIP712 *msg) {
-  RESP_INIT(EthereumMessageSignature);
-
-  CHECK_INITIALIZED
-
-  CHECK_PIN
-
-  if (msg->domain_hash.size != 32 || msg->message_hash.size != 32) {
-    fsm_sendFailure(FailureType_Failure_ProcessError, "data length error");
-    return;
-  }
-
-  char domain_hash[65] = {0};
-  char msg_hash[65] = {0};
-  data2hex(msg->domain_hash.bytes, 32, domain_hash);
-  data2hex(msg->message_hash.bytes, 32, msg_hash);
-  if (!fsm_layoutSignHash(
-          "Ethereum", resp->address, domain_hash, msg_hash,
-          _("Unable to decode EIP-712 data. Sign at your own risk."))) {
-    fsm_sendFailure(FailureType_Failure_ActionCancelled, NULL);
-    layoutHome();
-    return;
-  }
-
-  const HDNode *node = fsm_getDerivedNode(SECP256K1_NAME, msg->address_n,
-                                          msg->address_n_count, NULL);
-  if (!node) {
-    fsm_sendFailure(FailureType_Failure_DataError, NULL);
-    return;
-  }
-
-  ethereum_message_sign_eip712_onekey(msg, node, resp);
-  layoutHome();
-}
-
 void fsm_msgEthereumSignTypedHashOneKey(
     const EthereumSignTypedHashOneKey *msg) {
   RESP_INIT(EthereumTypedDataSignatureOneKey);
