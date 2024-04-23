@@ -148,7 +148,6 @@ void fsm_msgEthereumSignTxEIP1559OneKey(const EthereumSignTxEIP1559OneKey *msg);
 void fsm_msgEthereumTxAckOneKey(const EthereumTxAckOneKey *msg);
 void fsm_msgEthereumSignMessageOneKey(const EthereumSignMessageOneKey *msg);
 void fsm_msgEthereumVerifyMessageOneKey(const EthereumVerifyMessageOneKey *msg);
-void fsm_msgEthereumSignMessageEIP712(const EthereumSignMessageEIP712 *msg);
 void fsm_msgEthereumSignTypedHashOneKey(const EthereumSignTypedHashOneKey *msg);
 
 // nem

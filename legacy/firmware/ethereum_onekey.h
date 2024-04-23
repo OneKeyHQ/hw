@@ -43,10 +43,6 @@ void ethereum_typed_hash_sign_onekey(const EthereumSignTypedHashOneKey *msg,
                                      const HDNode *node,
                                      EthereumTypedDataSignatureOneKey *resp);
 bool ethereum_parse_onekey(const char *address, uint8_t pubkeyhash[20]);
-void ethereum_message_sign_eip712(const EthereumSignMessageEIP712 *msg,
-                                  const HDNode *node,
-                                  EthereumMessageSignature *resp);
-
 bool ethereum_path_check_onekey(uint32_t address_n_count,
                                 const uint32_t *address_n, bool pubkey_export,
                                 uint64_t chain);
