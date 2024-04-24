@@ -2233,13 +2233,16 @@ void layoutConfirmAutoLockDelay(uint32_t delay_ms) {
   oledRefresh();
 }
 
-bool layoutConfirmSafetyChecks(SafetyCheckLevel safety_ckeck_level) {
+bool layoutConfirmSafetyChecks(SafetyCheckLevel safety_ckeck_level,
+                               bool interactive) {
   uint8_t key = KEY_NULL;
-  ButtonRequest resp = {0};
-  memzero(&resp, sizeof(ButtonRequest));
-  resp.has_code = true;
-  resp.code = ButtonRequestType_ButtonRequest_ProtectCall;
-  msg_write(MessageType_MessageType_ButtonRequest, &resp);
+  if (interactive) {
+    ButtonRequest resp = {0};
+    memzero(&resp, sizeof(ButtonRequest));
+    resp.has_code = true;
+    resp.code = ButtonRequestType_ButtonRequest_ProtectCall;
+    msg_write(MessageType_MessageType_ButtonRequest, &resp);
+  }
   if (safety_ckeck_level == SafetyCheckLevel_Strict) {
     // Disallow unsafe actions. This is the default.
     if (ui_language == 0) {

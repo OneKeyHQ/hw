@@ -481,12 +481,18 @@ static struct menu trezor_compatibility_set_menu = {
 };
 
 void menu_set_safety_checks(int index) {
-  (void)index;
-  if (index) {
-    config_setSafetyCheckLevel(SafetyCheckLevel_PromptAlways);
+  bool confirmed = false;
+  if (index == 0) {
+    confirmed = layoutConfirmSafetyChecks(SafetyCheckLevel_Strict, false);
   } else {
-    config_setSafetyCheckLevel(SafetyCheckLevel_Strict);
+    confirmed =
+        layoutConfirmSafetyChecks(SafetyCheckLevel_PromptTemporarily, false);
   }
+  if (!confirmed) {
+    return;
+  }
+  config_setSafetyCheckLevel(index ? SafetyCheckLevel_PromptTemporarily
+                                   : SafetyCheckLevel_Strict);
 }
 
 static struct menu_item safety_checks_set_menu_items[] = {

@@ -123,7 +123,8 @@ void layoutCosiSign(const uint32_t *address_n, size_t address_n_count,
                     const uint8_t *data, uint32_t len);
 
 void layoutConfirmAutoLockDelay(uint32_t delay_ms);
-bool layoutConfirmSafetyChecks(SafetyCheckLevel safety_checks_level);
+bool layoutConfirmSafetyChecks(SafetyCheckLevel safety_checks_level,
+                               bool interactive);
 
 void layoutConfirmHash(const BITMAP *icon, const char *description,
                        const uint8_t *hash, uint32_t len);
