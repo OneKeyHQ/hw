@@ -315,11 +315,11 @@ void fsm_msgGetAddress(const GetAddress *msg) {
     if (msg->has_multisig && coin->has_segwit) {
       if (!msg->has_ignore_xpub_magic || !msg->ignore_xpub_magic) {
         if (msg->script_type == InputScriptType_SPENDWITNESS &&
-            coin->xpub_magic_segwit_native) {
-          multisig_xpub_magic = coin->xpub_magic_segwit_native;
+            coin->xpub_magic_multisig_segwit_native) {
+          multisig_xpub_magic = coin->xpub_magic_multisig_segwit_native;
         } else if (msg->script_type == InputScriptType_SPENDP2SHWITNESS &&
-                   coin->xpub_magic_segwit_p2sh) {
-          multisig_xpub_magic = coin->xpub_magic_segwit_p2sh;
+                   coin->xpub_magic_multisig_segwit_p2sh) {
+          multisig_xpub_magic = coin->xpub_magic_multisig_segwit_p2sh;
         }
       }
     }
