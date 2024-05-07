@@ -413,31 +413,20 @@ static bool layoutEthereumConfirmTx(
                                       value2, key3, value3, NULL, NULL);
     }
   } else if (token == NULL) {
-    if (!is_eip1559 && data_total > 0) {
-      return layoutBlindSign(
-          chain_name, true, to_str, signer, params->data_initial_chunk_bytes,
-          data_total, _("Maximum Fee:"), gas_value, NULL, NULL, NULL, NULL);
-    } else if (is_eip1559 && data_total > 0) {
-      return layoutBlindSign(chain_name, true, to_str, signer,
-                             params->data_initial_chunk_bytes, data_total, key1,
-                             value1, key2, value2, key3, value3);
+    bn_add(&total, &val);
+    bn_add(&total, &gas);
+    ethereumFormatAmount(&val, NULL, amount, sizeof(amount));
+    ethereumFormatAmount(&total, NULL, total_amount, sizeof(total_amount));
+    if (!is_eip1559) {
+      return layoutTransactionSignEVM(
+          chain_name, params->chain_id, false, amount, to_str, signer, NULL,
+          NULL, params->data_initial_chunk_bytes, data_total, _("Maximum Fee:"),
+          gas_value, _("Total Amount:"), total_amount, NULL, NULL, NULL, NULL);
     } else {
-      bn_add(&total, &val);
-      bn_add(&total, &gas);
-      ethereumFormatAmount(&val, NULL, amount, sizeof(amount));
-      ethereumFormatAmount(&total, NULL, total_amount, sizeof(total_amount));
-      if (!is_eip1559) {
-        return layoutTransactionSignEVM(
-            chain_name, params->chain_id, false, amount, to_str, signer, NULL,
-            NULL, params->data_initial_chunk_bytes, data_total,
-            _("Maximum Fee:"), gas_value, _("Total Amount:"), total_amount,
-            NULL, NULL, NULL, NULL);
-      } else {
-        return layoutTransactionSignEVM(
-            chain_name, params->chain_id, false, amount, to_str, signer, NULL,
-            NULL, params->data_initial_chunk_bytes, data_total, key1, value1,
-            key2, value2, key3, value3, _("Total Amount:"), total_amount);
-      }
+      return layoutTransactionSignEVM(
+          chain_name, params->chain_id, false, amount, to_str, signer, NULL,
+          NULL, params->data_initial_chunk_bytes, data_total, key1, value1,
+          key2, value2, key3, value3, _("Total Amount:"), total_amount);
     }
   } else {
     ethereumFormatAmount(&val, token, amount, sizeof(amount));
