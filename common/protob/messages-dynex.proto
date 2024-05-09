@@ -88,20 +88,3 @@ message DnxSignedTx {
     repeated bytes signatures = 1;
     repeated bytes output_keys = 2;
 }
-
-/**
- * Request: Get the tracking key for the given address to generate the reserve proof
- * @start
- * @next DnxTrackingKey
- */
-message DnxGetTrackingKey {
-    repeated uint32 address_n = 1;              // BIP-32 path to derive the key from master node
-}
-
-/**
- * Response: Tracking key for the given address
- * @end
- */
-message DnxTrackingKey {
-    required bytes tracking_key = 1;            // tracking key for the given address
-}

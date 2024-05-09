@@ -34,10 +34,3 @@ def get_address(
     return client.call(
         messages.DnxGetAddress(address_n=address_n, show_display=show_display)
     )
-
-
-@expect(messages.DnxTrackingKey, field="tracking_key", ret_type=bytes)
-def get_tracking_key(client: "TrezorClient", address_n: "Address") -> "MessageType":
-    return client.call(
-        messages.DnxGetTrackingKey(address_n=address_n)
-    )

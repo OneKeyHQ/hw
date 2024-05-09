@@ -41,13 +41,3 @@ def get_address(client: "TrezorClient", address: str, show_display: bool) -> str
     """Get Dynex address."""
     address_n = tools.parse_path(address)
     return dnx.get_address(client, address_n, show_display)
-
-
-@cli.command()
-@click.option("-n", "--address", required=True, help=PATH_HELP)
-@with_client
-def get_tracking_key(client: "TrezorClient", address: str) -> str:
-    """Get Dynex tracking key."""
-    address_n = tools.parse_path(address)
-    tracking_key = dnx.get_tracking_key(client, address_n).hex()
-    return tracking_key

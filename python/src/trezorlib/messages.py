@@ -306,7 +306,7 @@ class MessageType(IntEnum):
     BixinBackupDevice = 914
     BixinBackupDeviceAck = 915
     BixinPinInputOnDevice = 10000
-    EthereumSignMessageEIP712 = 10200
+    Deprecated_EthereumSignMessageEIP712 = 10200
     GetPublicKeyMultiple = 10210
     PublicKeyMultiple = 10211
     ConfluxGetAddress = 10112
@@ -388,8 +388,6 @@ class MessageType(IntEnum):
     DnxInputAck = 11804
     DnxRTSigsRequest = 11805
     DnxSignedTx = 11806
-    DnxGetTrackingKey = 11807
-    DnxTrackingKey = 11808
     DeviceEraseSector = 10026
 
 
@@ -4939,34 +4937,6 @@ class DnxSignedTx(protobuf.MessageType):
         self.output_keys: Sequence["bytes"] = output_keys if output_keys is not None else []
 
 
-class DnxGetTrackingKey(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 11807
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False, default=None),
-    }
-
-    def __init__(
-        self,
-        *,
-        address_n: Optional[Sequence["int"]] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-
-
-class DnxTrackingKey(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 11808
-    FIELDS = {
-        1: protobuf.Field("tracking_key", "bytes", repeated=False, required=True),
-    }
-
-    def __init__(
-        self,
-        *,
-        tracking_key: "bytes",
-    ) -> None:
-        self.tracking_key = tracking_key
-
-
 class DnxTxKey(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = None
     FIELDS = {
@@ -6192,26 +6162,6 @@ class EthereumTypedDataSignatureOneKey(protobuf.MessageType):
     ) -> None:
         self.signature = signature
         self.address = address
-
-
-class EthereumSignMessageEIP712(protobuf.MessageType):
-    MESSAGE_WIRE_TYPE = 10200
-    FIELDS = {
-        1: protobuf.Field("address_n", "uint32", repeated=True, required=False, default=None),
-        2: protobuf.Field("domain_hash", "bytes", repeated=False, required=False, default=None),
-        3: protobuf.Field("message_hash", "bytes", repeated=False, required=False, default=None),
-    }
-
-    def __init__(
-        self,
-        *,
-        address_n: Optional[Sequence["int"]] = None,
-        domain_hash: Optional["bytes"] = None,
-        message_hash: Optional["bytes"] = None,
-    ) -> None:
-        self.address_n: Sequence["int"] = address_n if address_n is not None else []
-        self.domain_hash = domain_hash
-        self.message_hash = message_hash
 
 
 class EthereumAccessListOneKey(protobuf.MessageType):

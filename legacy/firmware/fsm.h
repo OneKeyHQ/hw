@@ -325,5 +325,4 @@ void fsm_msgDnxGetAddress(const DnxGetAddress *msg);
 void fsm_msgDnxSignTx(const DnxSignTx *msg);
 void fsm_msgDnxInputAck(const DnxInputAck *msg);
 void fsm_msgDnxRTSigsRequest(const DnxRTSigsRequest *msg);
-void fsm_msgDnxGetTrackingKey(const DnxGetTrackingKey *msg);
 #endif

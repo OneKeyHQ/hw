@@ -188,14 +188,6 @@ void dnx_get_address(char* addr, const uint8_t* key_seed, bool cache_keys) {
   }
 }
 
-void dnx_get_tracking_key(uint8_t* tracking_key) {
-  encodepoint(tracking_key, &spend_pub_key);
-  encodepoint(tracking_key + 32, &view_pub_key);
-  encodeint(tracking_key + 96, view_sec_key);
-  memzero(view_sec_key, sizeof(view_sec_key));
-  memzero(&spend_pub_key, sizeof(spend_pub_key));
-  memzero(&view_pub_key, sizeof(view_pub_key));
-}
 void dnx_singing_init(const DnxSignTx* msg) {
   dnx_signing = true;
   dnx_inputs_count = msg->inputs_count;
@@ -320,37 +312,6 @@ refresh_menu:
     bubble_key = oledDrawPageableStringAdapter(
         0, y + 10, payment_id_hex, FONT_STANDARD, &bmp_bottom_left_arrow,
         &bmp_bottom_right_arrow);
-  }
-  oledRefresh();
-  HANDLE_KEY(bubble_key);
-}
-bool layoutDnxGetTrackingKey(const char* addr) {
-  bool result = false;
-  int index = 0;
-  int y = 0;
-  uint8_t max_index = 1;
-  ButtonRequest resp = {0};
-  memzero(&resp, sizeof(ButtonRequest));
-  resp.has_code = true;
-  resp.code = ButtonRequestType_ButtonRequest_ProtectCall;
-  msg_write(MessageType_MessageType_ButtonRequest, &resp);
-refresh_menu:
-  layoutSwipe();
-  oledClear();
-  y = 13;
-  uint8_t bubble_key = KEY_NULL;
-  layoutHeader(_("Export Dnx tracking key"));
-  if (index == 0) {
-    oledDrawStringAdapter(0, y, _("Address:"), FONT_STANDARD);
-    bubble_key = oledDrawPageableStringAdapter(0, y + 10, addr, FONT_STANDARD,
-                                               &bmp_bottom_left_close,
-                                               &bmp_bottom_right_arrow);
-  } else if (index == 1) {
-    oledDrawStringAdapter(
-        0, y, _("Do you want to export the\ntracking key of the address?"),
-        FONT_STANDARD);
-    layoutButtonNoAdapter(NULL, &bmp_bottom_left_close);
-    layoutButtonYesAdapter(NULL, &bmp_bottom_right_confirm);
   }
   oledRefresh();
   HANDLE_KEY(bubble_key);

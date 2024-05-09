@@ -3586,34 +3586,6 @@ if TYPE_CHECKING:
         def is_type_of(cls, msg: Any) -> TypeGuard["DnxSignedTx"]:
             return isinstance(msg, cls)
 
-    class DnxGetTrackingKey(protobuf.MessageType):
-        address_n: "list[int]"
-
-        def __init__(
-            self,
-            *,
-            address_n: "list[int] | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["DnxGetTrackingKey"]:
-            return isinstance(msg, cls)
-
-    class DnxTrackingKey(protobuf.MessageType):
-        tracking_key: "bytes"
-
-        def __init__(
-            self,
-            *,
-            tracking_key: "bytes",
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["DnxTrackingKey"]:
-            return isinstance(msg, cls)
-
     class DnxTxKey(protobuf.MessageType):
         ephemeral_tx_sec_key: "bytes | None"
         ephemeral_tx_pub_key: "bytes | None"
@@ -4708,24 +4680,6 @@ if TYPE_CHECKING:
 
         @classmethod
         def is_type_of(cls, msg: Any) -> TypeGuard["EthereumTypedDataSignatureOneKey"]:
-            return isinstance(msg, cls)
-
-    class EthereumSignMessageEIP712(protobuf.MessageType):
-        address_n: "list[int]"
-        domain_hash: "bytes | None"
-        message_hash: "bytes | None"
-
-        def __init__(
-            self,
-            *,
-            address_n: "list[int] | None" = None,
-            domain_hash: "bytes | None" = None,
-            message_hash: "bytes | None" = None,
-        ) -> None:
-            pass
-
-        @classmethod
-        def is_type_of(cls, msg: Any) -> TypeGuard["EthereumSignMessageEIP712"]:
             return isinstance(msg, cls)
 
     class EthereumAccessListOneKey(protobuf.MessageType):

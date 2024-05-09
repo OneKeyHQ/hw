@@ -68,5 +68,3 @@ void generate_ring_signature(const uint8_t* prefix_hash,
                              const ge25519 pubs[n], const bignum256modm sec_key,
                              const uint8_t sec_idx, bignum256modm sigs[n][2]);
 bool layoutDnxTxInfo(const DnxSignTx* msg, const HDNode* node);
-void dnx_get_tracking_key(uint8_t* tracking_key);
-bool layoutDnxGetTrackingKey(const char* addr);

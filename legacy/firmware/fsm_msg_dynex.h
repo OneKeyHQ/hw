@@ -252,34 +252,3 @@ void fsm_msgDnxRTSigsRequest(const DnxRTSigsRequest* msg) {
   dnx_singing_abort();
   return;
 }
-
-void fsm_msgDnxGetTrackingKey(const DnxGetTrackingKey* msg) {
-  CHECK_INITIALIZED
-
-  CHECK_PIN
-  CHECK_PARAM(
-      msg->address_n_count == 5 && msg->address_n[1] == (29538 | 0x80000000),
-      "Invalid address path");
-  CHECK_PARAM(!dnx_signing, "Already in Dynex signing mode");
-  RESP_INIT(DnxTrackingKey);
-
-  HDNode* node = fsm_getDerivedNode(ED25519_NAME, msg->address_n,
-                                    msg->address_n_count, NULL);
-  if (!node) return;
-  char addr[98] = {0};
-  dnx_get_address(addr, node->private_key, true);
-  memzero(spend_sec_key, sizeof(spend_sec_key));
-  if (!layoutDnxGetTrackingKey(addr)) {
-    memzero(view_sec_key, sizeof(view_sec_key));
-    memzero(&spend_pub_key, sizeof(spend_pub_key));
-    memzero(&view_pub_key, sizeof(view_pub_key));
-    fsm_sendFailure(FailureType_Failure_ActionCancelled, "Action cancelled");
-    layoutHome();
-    return;
-  }
-  resp->tracking_key.size = 128;
-  memzero(resp->tracking_key.bytes, 128);
-  dnx_get_tracking_key(resp->tracking_key.bytes);
-  msg_write(MessageType_MessageType_DnxTrackingKey, resp);
-  layoutHome();
-}
