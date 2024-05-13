@@ -4624,7 +4624,9 @@ bool layoutTransactionSignEVM(const char *chain_name, uint64_t chain_id,
   resp.has_code = true;
   resp.code = ButtonRequestType_ButtonRequest_SignTx;
   msg_write(MessageType_MessageType_ButtonRequest, &resp);
-
+#if !EMULATOR
+  enableLongPress(true);
+#endif
 refresh_menu:
   layoutSwipe();
   oledClear();
@@ -4768,8 +4770,8 @@ refresh_menu:
     oledDrawStringAdapter(0, y + 10, signer, FONT_STANDARD);
     layoutButtonNoAdapter(NULL, &bmp_bottom_left_arrow);
     layoutButtonYesAdapter(NULL, &bmp_bottom_right_arrow);
-  } else if ((has_chain_id == false && 3 == index && len > 0) ||
-             (has_chain_id == true && 4 == index && len > 0)) {  // details
+  } else if ((has_chain_id == false && 3 == index) ||
+             (has_chain_id == true && 4 == index)) {  // details
     sub_index = 0;
     is_details_page = true;
     is_nft_page = false;
@@ -4825,7 +4827,7 @@ refresh_menu:
     oledDrawStringAdapter(0, y, tx_msg[1], FONT_STANDARD);
     layoutButtonNoAdapter(NULL, &bmp_bottom_left_close);
     layoutButtonYesAdapter(NULL, &bmp_bottom_right_confirm);
-  } else {  // raw data
+  } else if (len > 0) {  // raw data
     layoutHeader(title_data);
     is_details_page = false;
     is_nft_page = false;
@@ -4889,8 +4891,17 @@ refresh_menu:
     layoutButtonYesAdapter(NULL, &bmp_bottom_right_arrow);
   }
   oledRefresh();
-
   key = protectWaitKey(0, 0);
+#if !EMULATOR
+  if (isLongPress(KEY_UP_OR_DOWN) && getLongPressStatus()) {
+    if (isLongPress(KEY_UP)) {
+      key = KEY_UP;
+    } else if (isLongPress(KEY_DOWN)) {
+      key = KEY_DOWN;
+    }
+    delay_ms(75);
+  }
+#endif
   switch (key) {
     case KEY_UP:
       if (sub_index > 0) {
@@ -4942,7 +4953,9 @@ refresh_menu:
     default:
       break;
   }
-
+#if !EMULATOR
+  enableLongPress(false);
+#endif
   return result;
 }
 
