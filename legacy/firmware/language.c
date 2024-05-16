@@ -1,6 +1,6 @@
 #include "language.h"
 
-const char *languages[][2] = {
+const char *const languages[][2] = {
     //
     {" Disabled", "已禁用"},
     {" Enabled", "已启用"},
