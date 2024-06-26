@@ -40,6 +40,8 @@
 #include "br_check.h"
 #include "image.h"
 #include "mini_printf.h"
+#else
+uint8_t EMULATOR_BUILD_ID[32] = {0};
 #endif
 
 static void ui_progress(mp_obj_t ui_wait_callback, uint32_t current,
@@ -209,8 +211,11 @@ STATIC mp_obj_t mod_trezorutils_onekey_firmware_hash(void) {
   vstr_t hash = {0};
 
   vstr_init_len(&hash, 32);
-
+#ifndef TREZOR_EMULATOR
   memcpy((uint8_t *)hash.buf, get_firmware_hash(), 32);
+#else
+  memset((uint8_t *)hash.buf, 0, 32);
+#endif
 
   return mp_obj_new_str_from_vstr(&mp_type_bytes, &hash);
 }
@@ -351,7 +356,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_trezorutils_board_hash_obj,
 ///     """
 STATIC mp_obj_t mod_trezorutils_boot_build_id(void) {
 #ifdef TREZOR_EMULATOR
-  mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)"EMULATOR", 8);
+  return mp_obj_new_str_copy(&mp_type_str, (const uint8_t *)"EMULATOR", 8);
 #else
   char *str = get_bootloader_build_id();
 
@@ -374,9 +379,16 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_0(mod_trezorutils_usb_data_connected_obj,
 
 STATIC mp_obj_str_t mod_trezorutils_revision_obj = {
     {&mp_type_bytes}, 0, sizeof(SCM_REVISION) - 1, (const byte *)SCM_REVISION};
-
+#ifndef TREZOR_EMULATOR
 STATIC mp_obj_str_t mod_trezorutils_build_id_obj = {
     {&mp_type_bytes}, 0, sizeof(BUILD_ID) - 1, (const byte *)BUILD_ID};
+#else
+STATIC mp_obj_str_t mod_trezorutils_build_id_obj = {
+    {&mp_type_bytes},
+    0,
+    sizeof(EMULATOR_BUILD_ID) - 1,
+    (const byte *)EMULATOR_BUILD_ID};
+#endif
 
 #define PASTER(s) MP_QSTR_##s
 #define MP_QSTR(s) PASTER(s)

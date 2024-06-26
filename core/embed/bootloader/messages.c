@@ -414,8 +414,11 @@ static void send_msg_features_ex(uint8_t iface_num,
   if (vhdr && hdr) {
     const char *ver_str = format_ver("%d.%d.%d", hdr->onekey_version);
     MSG_SEND_ASSIGN_STRING_LEN(onekey_firmware_version, ver_str, 5);
-
+#ifdef EMULATOR
+    uint8_t *fimware_hash = "firmware_hash_emulator";
+#else
     uint8_t *fimware_hash = get_firmware_hash();
+#endif
     MSG_SEND_ASSIGN_BYTES(onekey_firmware_hash, fimware_hash, 32);
   }
   if (ble_name_state()) {
