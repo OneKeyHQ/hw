@@ -3590,7 +3590,11 @@ void layoutWords(const char *title, const BITMAP *bmp_up,
 }
 
 #define DEVICE_INFO_PAGE_NUM 5
+#if EMULATOR
+char bootloader_version[8] = "0.0.0";
+#else
 extern char bootloader_version[8];
+#endif
 
 void layouKeyValue(int y, const char *desc, const char *value) {
   oledDrawStringAdapter(0, y, desc, FONT_STANDARD);
