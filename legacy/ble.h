@@ -61,6 +61,10 @@ bool ble_passkey_state(void);
 #define ble_set_switch(...)
 #define ble_get_switch(...) false
 #define change_ble_sta(...)
+#define ble_get_build_id(void) "1234567"
+#define ble_get_hash(void) "6551e797240051925b8a62615f4c8baa"
+#define ble_build_id_state(...) false
+#define ble_hash_state(...) false
 #endif
 
 #endif

@@ -91,6 +91,7 @@
 #include "stellar.h"
 #include "sui.h"
 #include "tron.h"
+#include "ton.h"
 #endif
 
 #if EMULATOR
@@ -632,5 +633,6 @@ bool fsm_common_path_check(const uint32_t *address_n, uint32_t address_n_count,
 #include "fsm_msg_stellar.h"
 #include "fsm_msg_sui.h"
 #include "fsm_msg_tron.h"
+#include "fsm_msg_ton.h"
 
 #endif

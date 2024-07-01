@@ -1,0 +1,26 @@
+TonGetAddress.address_n                    max_count:8
+TonGetAddress.show_display                 max_size:1
+TonGetAddress.wallet_version               max_size:1
+TonGetAddress.is_bounceable                max_size:1
+TonGetAddress.is_testnet_only              max_size:1
+TonGetAddress.workchain                    max_size:4
+TonGetAddress.wallet_id                    max_size:4
+TonAddress.public_key                      max_size:64
+TonAddress.address                         max_size:36
+
+
+TonSignMessage.address_n                    max_count:8
+TonSignMessage.destination                  max_size:1
+TonSignMessage.jetton_master_address        max_size:1
+TonSignMessage.ton_amount                   max_size:1
+TonSignMessage.jetton_amount                max_size:1
+TonSignMessage.comment                      max_size:1
+TonSignMessage.mode                         max_size:1
+TonSignMessage.seqno                        max_size:1
+TonSignMessage.expire_at                    max_size:1
+TonSignMessage.wallet_version               max_size:1
+TonSignMessage.wallet_id                    max_size:1
+TonSignMessage.workchain                    max_size:1
+TonSignMessage.is_bounceable                max_size:1
+TonSignMessage.is_testnet_only              max_size:1
+TonSignedMessage.signature                  max_size:1

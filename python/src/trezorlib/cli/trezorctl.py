@@ -63,6 +63,7 @@ from . import (
     sui,
     tezos,
     tron,
+    ton,
     with_client,
 )
 
@@ -98,6 +99,7 @@ COMMAND_ALIASES = {
     "xlm": stellar.cli,
     "xtz": tezos.cli,
     "tron": tron.cli,
+    "ton":ton.cli,
     "cosmos": cosmos.cli,
     "polkadot": polkadot.cli,
     "aptos": aptos.cli,
@@ -447,6 +449,7 @@ cli.add_command(near.cli)
 cli.add_command(conflux.cli)
 cli.add_command(filecoin.cli)
 cli.add_command(tron.cli)
+cli.add_command(ton.cli)
 
 cli.add_command(firmware.cli)
 cli.add_command(debug.cli)

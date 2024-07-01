@@ -57,6 +57,9 @@ CFLAGS   += $(OPTFLAGS) \
             $(DBGFLAGS) \
             $(SANFLAGS) \
             -std=gnu11 \
+            -Wno-type-limits \
+            -Wno-format-security \
+            -Wno-unused-function \
             -W \
             -Wall \
             -Wextra \

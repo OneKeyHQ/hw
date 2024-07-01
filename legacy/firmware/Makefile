@@ -140,6 +140,7 @@ OBJS += base64.o
 OBJS += lnurl.o
 OBJS += nervos.o
 OBJS += dynex.o
+OBJS += ton.o
 endif
 
 OBJS += debug.o
@@ -246,6 +247,7 @@ OBJS += protob/messages-nostr.pb.o
 OBJS += protob/messages-lnurl.pb.o
 OBJS += protob/messages-nervos.pb.o
 OBJS += protob/messages-dynex.pb.o
+OBJS += protob/messages-ton.pb.o
 endif
 
 OPTFLAGS ?= -Os
