@@ -195,13 +195,16 @@ bool polkadot_sign_tx(const PolkadotSignTx *msg, const HDNode *node,
   memcpy(polkadot_network, msg->network, strlen(msg->network) + 1);
   parser_error_t ret = polkadot_tx_parse(msg->raw_tx.bytes, msg->raw_tx.size);
   if (ret == parser_unexpected_callIndex) {
+    polkadot_network[0] -= 32;
     if (!layoutBlindSign(polkadot_network, signer)) {
       fsm_sendFailure(FailureType_Failure_ActionCancelled, "Signing cancelled");
       layoutHome();
       return false;
     }
   } else if (ret != parser_ok) {
-    fsm_sendFailure(FailureType_Failure_DataError, "Tx invalid");
+    char error_msg[32] = {0};
+    snprintf(error_msg, sizeof(error_msg), "Tx parse error: %d", ret);
+    fsm_sendFailure(FailureType_Failure_DataError, error_msg);
     layoutHome();
     return false;
   } else {
