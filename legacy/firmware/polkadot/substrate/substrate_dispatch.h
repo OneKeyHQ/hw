@@ -2,10 +2,8 @@
 #define __POLKADOT_SUBSTRATE_DISPATCH_H__
 
 #include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include "../parser_common.h"
-#include "substrate_dispatch_V18.h"
+// #include "substrate_dispatch_V25.h"
+#include "substrate_dispatch_V26.h"
 
 parser_error_t _readMethod(parser_context_t* c, uint8_t moduleIdx,
                            uint8_t callIdx, pd_Method_t* method);

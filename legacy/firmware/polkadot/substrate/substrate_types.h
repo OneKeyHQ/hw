@@ -57,7 +57,38 @@ typedef struct {
 ////////////////////////
 // Common types
 ////////////////////////
+typedef compactInt_t pd_Compactu32_t;  // u32
+typedef compactInt_t pd_Compactu64_t;  // u64
+typedef compactInt_t pd_CompactAssignments_t;
+typedef compactInt_t pd_CompactBountyIndex_t;
+typedef compactInt_t pd_CompactEraIndex_t;
+typedef compactInt_t pd_CompactMemberCount_t;
+typedef compactInt_t pd_CompactMoment_t;
+typedef compactInt_t pd_CompactPropIndex_t;
+typedef compactInt_t pd_CompactProposalIndex_t;
+typedef compactInt_t pd_CompactReferendumIndex_t;
+typedef compactInt_t pd_CompactRegistrarIndex_t;
+typedef compactInt_t pd_CompactWeight_t;
 
+typedef enum { eAddressIndex = 0, eAddressId = 1 } pd_Address_e;
+
+typedef struct {
+  pd_Address_e type;
+  uint64_t idx;
+  const uint8_t* idPtr;
+} pd_Address_t;
+
+typedef struct {
+  compactInt_t index;
+} pd_CompactIndex_t;
+
+typedef struct {
+  compactInt_t value;
+} pd_CompactBalance_t;
+
+typedef struct {
+  const uint8_t* _ptr;
+} pd_u8_array_32_t;
 typedef struct {
   const uint8_t* _ptr;
 } pd_Balance_t;
@@ -140,50 +171,43 @@ typedef struct {
   uint64_t _lenBuffer;
 } pd_VecTupleDataData_t;
 
-////////////////////////
-// /Common types
-////////////////////////
-
-// #pragma clang diagnostic push
-// #pragma clang diagnostic ignored "-Wextern-c-compat"
-// #pragma clang diagnostic pop
-
-////////////////////////
-// Types that require out of order declaration
-////////////////////////
-
-typedef enum { eAddressIndex = 0, eAddressId = 1 } pd_Address_e;
-
 typedef struct {
-  pd_Address_e type;
-  uint64_t idx;
-  const uint8_t* idPtr;
-} pd_Address_t;
-
-typedef struct {
-  compactInt_t index;
-} pd_CompactIndex_t;
+  const uint8_t* _ptr;
+} pd_AccountId_t;
 
 typedef struct {
   compactInt_t value;
-} pd_CompactBalance_t;
+} pd_CompactAccountIndex_t;
+typedef struct {
+  uint8_t value;
+  union {
+    pd_AccountId_t id;
+    pd_CompactAccountIndex_t index;
+    pd_Bytes_t raw;
+    const uint8_t* _ptr;
+  };
+} pd_AccountIdLookupOfT_t;
+typedef struct {
+  uint8_t value;
+  pd_Bytes_t named;
+} pd_NetworkIdV2_t;
 
-////////////////////////
-////////////////////////
-////////////////////////
-////////////////////////
+typedef struct {
+  uint64_t blockNumber;
+  pd_u8_array_32_t blockHash;
+} pd_ByFork_t;
+typedef struct {
+  uint8_t value;
+  union {
+    pd_u8_array_32_t byGenesis;
+    pd_ByFork_t byFork;
+    pd_Compactu64_t chainId;
+  };
+} pd_NetworkIdV3_t;
 
-typedef compactInt_t pd_Compactu32_t;  // u32
-typedef compactInt_t pd_Compactu64_t;  // u64
-typedef compactInt_t pd_CompactAssignments_t;
-typedef compactInt_t pd_CompactBountyIndex_t;
-typedef compactInt_t pd_CompactEraIndex_t;
-typedef compactInt_t pd_CompactMemberCount_t;
-typedef compactInt_t pd_CompactMoment_t;
-typedef compactInt_t pd_CompactPropIndex_t;
-typedef compactInt_t pd_CompactProposalIndex_t;
-typedef compactInt_t pd_CompactReferendumIndex_t;
-typedef compactInt_t pd_CompactRegistrarIndex_t;
-typedef compactInt_t pd_CompactWeight_t;
+typedef struct {
+  pd_AccountId_t id;
+  pd_Data_t data;
+} pd_TupleAccountIdData_t;
 
 #endif

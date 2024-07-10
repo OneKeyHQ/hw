@@ -14,8 +14,6 @@
   }
 
 #define __Z_INLINE inline __attribute__((always_inline)) static
-#define CHECK_APP_CANARY() \
-  {}
 
 #define array_length(array) (sizeof(array) / sizeof((array)[0]))
 __Z_INLINE void strncpy_s(char *dst, const char *src, size_t dstSize) {

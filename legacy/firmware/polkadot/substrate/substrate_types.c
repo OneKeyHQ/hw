@@ -6,7 +6,8 @@
 #include "substrate_dispatch.h"
 
 extern char __polkadot_ticker[8];
-extern uint16_t __polkadot_dicimal;
+extern uint16_t __polkadot_decimal;
+extern char polkadot_network[32];
 
 #define IS_PRINTABLE(c) (c >= 0x20 && c <= 0x7e)
 
@@ -101,7 +102,7 @@ parser_error_t _readBalanceOf(parser_context_t* c, pd_BalanceOf_t* v) {
 }
 
 #include "util.h"
-parser_error_t _substrate_readBytes(parser_context_t* c, pd_Bytes_t* v) {
+parser_error_t p_readBytes(parser_context_t* c, pd_Bytes_t* v) {
   CHECK_INPUT()
 
   compactInt_t clen;
@@ -335,7 +336,7 @@ parser_error_t _substrate_toStringBalance(const pd_Balance_t* v, char* outValue,
   }
 
   // Format number
-  if (intstr_to_fpstr_inplace(bufferUI, sizeof(bufferUI), __polkadot_dicimal) ==
+  if (intstr_to_fpstr_inplace(bufferUI, sizeof(bufferUI), __polkadot_decimal) ==
       0) {
     return parser_unexpected_value;
   }
@@ -650,3 +651,208 @@ parser_error_t _toStringTupleDataData(const pd_TupleDataData_t* v,
 ///////////////////////////////////
 ///////////////////////////////////
 ///////////////////////////////////
+parser_error_t _readAccountId(parser_context_t* c,
+                              pd_AccountId_t* v){GEN_DEF_READARRAY(32)}
+
+parser_error_t
+    _readCompactAccountIndex(parser_context_t* c, pd_CompactAccountIndex_t* v) {
+  return _readCompactInt(c, &v->value);
+}
+parser_error_t _readTupleAccountIdData(parser_context_t* c,
+                                       pd_TupleAccountIdData_t* v) {
+  CHECK_INPUT()
+  CHECK_ERROR(_readAccountId(c, &v->id));
+  CHECK_ERROR(_readData(c, &v->data));
+  return parser_ok;
+}
+parser_error_t _readAccountIdLookupOfT(parser_context_t* c,
+                                       pd_AccountIdLookupOfT_t* v) {
+  CHECK_INPUT()
+  if (strncmp(polkadot_network, "joystream", 9) != 0) {
+    CHECK_ERROR(_preadUInt8(c, &v->value))
+  }
+  switch (v->value) {
+    case 0:  // Id
+      CHECK_ERROR(_readAccountId(c, &v->id))
+      break;
+    case 1:  // Index
+      CHECK_ERROR(_readCompactAccountIndex(c, &v->index))
+      break;
+    case 2:  // Raw
+      CHECK_ERROR(p_readBytes(c, &v->raw))
+      break;
+    case 3:  // Address32
+      GEN_DEF_READARRAY(32)
+      break;
+    case 4:  // Address20
+      GEN_DEF_READARRAY(20)
+      break;
+    default:
+      return parser_unexpected_value;
+  }
+
+  return parser_ok;
+}
+
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
+
+parser_error_t _toStringAccountId(const pd_AccountId_t* v, char* outValue,
+                                  uint16_t outValueLen, uint8_t pageIdx,
+                                  uint8_t* pageCount) {
+  return _toStringPubkeyAsAddress(v->_ptr, outValue, outValueLen, pageIdx,
+                                  pageCount);
+}
+
+parser_error_t _toStringCompactAccountIndex(const pd_CompactAccountIndex_t* v,
+                                            char* outValue,
+                                            uint16_t outValueLen,
+                                            uint8_t pageIdx,
+                                            uint8_t* pageCount) {
+  return _toStringCompactInt(&v->value, 0, false, "", "", outValue, outValueLen,
+                             pageIdx, pageCount);
+}
+
+parser_error_t _toStringNetworkIdV2(const pd_NetworkIdV2_t* v, char* outValue,
+                                    uint16_t outValueLen, uint8_t pageIdx,
+                                    uint8_t* pageCount) {
+  CLEAN_AND_CHECK()
+  *pageCount = 1;
+  switch (v->value) {
+    case 0:  // Any
+      snprintf(outValue, outValueLen, "Any");
+      break;
+    case 1:  // Named
+      CHECK_ERROR(
+          _toStringBytes(&v->named, outValue, outValueLen, pageIdx, pageCount))
+      break;
+    case 2:  // Polkadot
+      snprintf(outValue, outValueLen, "Polkadot");
+      break;
+    case 3:  // Kusama
+      snprintf(outValue, outValueLen, "Kusama");
+      break;
+    default:
+      return parser_not_supported;
+  }
+
+  return parser_ok;
+}
+
+parser_error_t _toStringu8_array_32(const pd_u8_array_32_t* v, char* outValue,
+                                    uint16_t outValueLen, uint8_t pageIdx,
+                                    uint8_t* pageCount){
+    GEN_DEF_TOSTRING_ARRAY(32)} parser_error_t
+    _toStringByFork(const pd_ByFork_t* v, char* outValue, uint16_t outValueLen,
+                    uint8_t pageIdx, uint8_t* pageCount) {
+  CLEAN_AND_CHECK()
+
+  // First measure number of pages
+  uint8_t pages[2] = {0};
+  CHECK_ERROR(
+      _toStringu64(&v->blockNumber, outValue, outValueLen, 0, &pages[0]))
+  CHECK_ERROR(
+      _toStringu8_array_32(&v->blockHash, outValue, outValueLen, 0, &pages[1]))
+
+  *pageCount = 0;
+  for (uint8_t i = 0; i < (uint8_t)sizeof(pages); i++) {
+    *pageCount += pages[i];
+  }
+
+  if (pageIdx >= *pageCount) {
+    return parser_display_idx_out_of_range;
+  }
+
+  if (pageIdx < pages[0]) {
+    CHECK_ERROR(_toStringu64(&v->blockNumber, outValue, outValueLen, pageIdx,
+                             &pages[0]))
+    return parser_ok;
+  }
+  pageIdx -= pages[0];
+
+  if (pageIdx < pages[1]) {
+    CHECK_ERROR(_toStringu8_array_32(&v->blockHash, outValue, outValueLen,
+                                     pageIdx, &pages[1]))
+    return parser_ok;
+  }
+
+  return parser_display_idx_out_of_range;
+}
+parser_error_t _toStringNetworkIdV3(const pd_NetworkIdV3_t* v, char* outValue,
+                                    uint16_t outValueLen, uint8_t pageIdx,
+                                    uint8_t* pageCount) {
+  CLEAN_AND_CHECK()
+  *pageCount = 1;
+  switch (v->value) {
+    case 0:  // ByGenesis
+      CHECK_ERROR(_toStringu8_array_32(&v->byGenesis, outValue, outValueLen,
+                                       pageIdx, pageCount))
+      break;
+    case 1:  // ByFork
+      CHECK_ERROR(_toStringByFork(&v->byFork, outValue, outValueLen, pageIdx,
+                                  pageCount))
+      break;
+    case 7:  // Ethereum
+      CHECK_ERROR(_toStringCompactu64(&v->chainId, outValue, outValueLen,
+                                      pageIdx, pageCount))
+      break;
+
+    case 2:  // Polkadot
+      snprintf(outValue, outValueLen, "Polkadot");
+      break;
+    case 3:  // Kusama
+      snprintf(outValue, outValueLen, "Kusama");
+      break;
+    case 4:  // Westend
+      snprintf(outValue, outValueLen, "Westend");
+      break;
+    case 5:  // Rococo
+      snprintf(outValue, outValueLen, "Rococo");
+      break;
+    case 6:  // Wococo
+      snprintf(outValue, outValueLen, "Wococo");
+      break;
+    case 8:  // BitcoinCore
+      snprintf(outValue, outValueLen, "BitcoinCore");
+      break;
+    case 9:  // BitcoinCash
+      snprintf(outValue, outValueLen, "BitcoinCash");
+      break;
+    default:
+      return parser_not_supported;
+  }
+  return parser_ok;
+}
+parser_error_t _toStringAccountIdLookupOfT(const pd_AccountIdLookupOfT_t* v,
+                                           char* outValue, uint16_t outValueLen,
+                                           uint8_t pageIdx,
+                                           uint8_t* pageCount) {
+  CLEAN_AND_CHECK()
+  switch (v->value) {
+    case 0:  // Id
+      CHECK_ERROR(
+          _toStringAccountId(&v->id, outValue, outValueLen, pageIdx, pageCount))
+      break;
+    case 1:  // Index
+      CHECK_ERROR(_toStringCompactAccountIndex(&v->index, outValue, outValueLen,
+                                               pageIdx, pageCount))
+      break;
+    case 2:  // Raw
+      CHECK_ERROR(
+          _toStringBytes(&v->raw, outValue, outValueLen, pageIdx, pageCount))
+      break;
+    case 3:  // Address32
+    {
+      GEN_DEF_TOSTRING_ARRAY(32)
+    }
+    case 4:  // Address20
+    {
+      GEN_DEF_TOSTRING_ARRAY(20)
+    }
+    default:
+      return parser_not_supported;
+  }
+
+  return parser_ok;
+}

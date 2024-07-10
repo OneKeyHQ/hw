@@ -26,7 +26,6 @@ parser_error_t polkadot_parser_parse(parser_context_t *ctx, const uint8_t *data,
   ctx->tx_obj->nestCallIdx._nextPtr = NULL;
   ctx->tx_obj->nestCallIdx.isTail = true;
   parser_error_t err = _polkadot_readTx(ctx, ctx->tx_obj);
-  CTX_CHECK_AVAIL(ctx, 0)
 
   return err;
 }
@@ -48,7 +47,6 @@ parser_error_t polkadot_parser_validate(const parser_context_t *ctx) {
   // Iterate through all items to check that all can be shown and are valid
   uint8_t numItems = 0;
   CHECK_PARSER_ERR(polkadot_parser_getNumItems(ctx, &numItems))
-
   char tmpKey[128];
   char tmpVal[128];
 
@@ -58,7 +56,6 @@ parser_error_t polkadot_parser_validate(const parser_context_t *ctx) {
                                              tmpVal, sizeof(tmpVal), 0,
                                              &pageCount))
   }
-
   return parser_ok;
 }
 
@@ -101,7 +98,6 @@ parser_error_t polkadot_parser_getItem(const parser_context_t *ctx,
 
   uint8_t numItems;
   CHECK_PARSER_ERR(polkadot_parser_getNumItems(ctx, &numItems))
-  CHECK_APP_CANARY()
 
   if (displayIdx >= numItems) {
     return parser_no_data;

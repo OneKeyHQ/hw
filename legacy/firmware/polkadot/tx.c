@@ -3,17 +3,15 @@
 #include "parser.h"
 #include "parser_txdef.h"
 
-static parser_tx_t tx_obj;
-static parser_context_t ctx_parsed_tx;
+static parser_tx_t tx_obj = {0};
+static parser_context_t ctx_parsed_tx = {0};
 
 parser_error_t polkadot_tx_parse(const uint8_t *data, size_t dataLen) {
   uint8_t err = polkadot_parser_parse(&ctx_parsed_tx, data, dataLen, &tx_obj);
   if (err != parser_ok) {
     return err;
   }
-
   err = polkadot_parser_validate(&ctx_parsed_tx);
-  CHECK_APP_CANARY()
 
   if (err != parser_ok) {
     return err;

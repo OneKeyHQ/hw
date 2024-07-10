@@ -64,7 +64,7 @@
   pageIdx--;
 
 #define GEN_DEC_READFIX_UNSIGNED(BITS) \
-  parser_error_t _preadUInt##BITS(parser_context_t *ctx, uint##BITS##_t *value)
+  parser_error_t _preadUInt##BITS(parser_context_t *ctx, uint##BITS##_t *value);
 #define GEN_DEF_READFIX_UNSIGNED(BITS)                                        \
   parser_error_t _preadUInt##BITS(parser_context_t *ctx,                      \
                                   uint##BITS##_t *value) {                    \
@@ -157,8 +157,6 @@ GEN_DEC_READFIX_UNSIGNED(64);
 
 parser_error_t polkadot_parser_init(parser_context_t *ctx,
                                     const uint8_t *buffer, uint16_t bufferSize);
-
-parser_error_t _substrate_readBool(parser_context_t *c, pd_bool_t *value);
 
 parser_error_t _readCompactInt(parser_context_t *c, compactInt_t *v);
 

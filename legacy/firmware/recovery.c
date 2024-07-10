@@ -1017,7 +1017,7 @@ check_word:
       }
     }
   }
-  if (!protectChangePinOnDevice(false, true, true)) {
+  if (!protectChangePinOnDevice(false, true, false)) {
     goto_check(check_word);
   }
 

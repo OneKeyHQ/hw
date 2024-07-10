@@ -8,7 +8,6 @@
 #define CHECK_ERROR(__CALL)               \
   {                                       \
     parser_error_t __err = __CALL;        \
-    CHECK_APP_CANARY()                    \
     if (__err != parser_ok) return __err; \
   }
 
