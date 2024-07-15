@@ -89,7 +89,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="osmo",
         icon="A:/res/chain-osmo.png",
-        primary_color=0x252265,
+        primary_color=0x4D4996,
     )
     yield NetworkInfo(
         chainId="secret-4",
@@ -99,7 +99,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="secret",
         icon="A:/res/chain-scrt.png",
-        primary_color=0x151A20,
+        primary_color=0x626B75,
     )
     yield NetworkInfo(
         chainId="akashnet-2",
@@ -119,7 +119,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=8,
         hrp="cro",
         icon="A:/res/chain-cro.png",
-        primary_color=0x012F70,
+        primary_color=0x0F50AB,
     )
     yield NetworkInfo(
         chainId="iov-mainnet-ibc",
@@ -159,7 +159,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="iaa",
         icon="A:/res/chain-iris.png",
-        primary_color=0x171652,
+        primary_color=0x4947BC,
     )
     yield NetworkInfo(
         chainId="regen-1",
@@ -209,7 +209,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="emoney",
         icon="A:/res/chain-ngm.png",
-        primary_color=0x003034,
+        primary_color=0xCCF7EE,
     )
     yield NetworkInfo(
         chainId="agoric-3",
@@ -259,7 +259,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="axelar",
         icon="A:/res/chain-axl.png",
-        primary_color=0x20232A,
+        primary_color=0x54607C,
     )
     yield NetworkInfo(
         chainId="sommelier-3",
@@ -289,7 +289,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="gravity",
         icon="A:/res/chain-grav.png",
-        primary_color=0x102EA0,
+        primary_color=0x2946B4,
     )
     yield NetworkInfo(
         chainId="tgrade-mainnet-1",
@@ -299,7 +299,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="tgrade",
         icon="A:/res/chain-tgd.png",
-        primary_color=0x1A1D26,
+        primary_color=0x4F5D87,
     )
     yield NetworkInfo(
         chainId="stride-1",
@@ -328,7 +328,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinMinimalDenom="inj",
         coinDecimals=18,
         hrp="inj",
-        icon="A:/res/chain-inj.png",
+        icon="A:/res/chain-ing.png",
         primary_color=0x01A8FC,
     )
     yield NetworkInfo(
@@ -349,7 +349,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=6,
         hrp="quick",
         icon="A:/res/chain-qck.png",
-        primary_color=0x0B0B0B,
+        primary_color=0x858585,
     )
     yield NetworkInfo(
         chainId="fetchhub-4",
@@ -359,7 +359,7 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         coinDecimals=18,
         hrp="fetch",
         icon="A:/res/chain-fet.png",
-        primary_color=0x19196F,
+        primary_color=0x4C4CAE,
     )
     yield NetworkInfo(
         chainId="celestia",
