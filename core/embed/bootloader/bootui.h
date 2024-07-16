@@ -88,7 +88,7 @@ void ui_title_update(void);
 int ui_user_input(int zones);
 int ui_input_poll(int zones, bool poll);
 void ui_bootloader_first(const image_header* const hdr);
-void ui_bootloader_second(const image_header* const hdr);
+void ui_bootloader_view_details(const image_header* const hdr);
 void ui_wipe_confirm(const image_header* const hdr);
 void ui_install_confirm(image_header* current_hdr,
                         const image_header* const new_hdr);

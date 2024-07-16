@@ -361,7 +361,9 @@ static void send_msg_features(uint8_t iface_num,
       MSG_SEND_ASSIGN_VALUE(fw_patch, ((hdr->version >> 16) & 0xFF));
       MSG_SEND_ASSIGN_STRING_LEN(fw_vendor, vhdr->vstr, vhdr->vstr_len);
       const char *ver_str = format_ver("%d.%d.%d", hdr->onekey_version);
-      MSG_SEND_ASSIGN_STRING_LEN(onekey_version, ver_str, 5);
+      MSG_SEND_ASSIGN_STRING_LEN(onekey_version, ver_str, strlen(ver_str));
+      MSG_SEND_ASSIGN_STRING_LEN(onekey_firmware_version, ver_str,
+                                 strlen(ver_str));
     } else {
       MSG_SEND_ASSIGN_VALUE(firmware_present, false);
     }
@@ -393,12 +395,11 @@ static void send_msg_features(uint8_t iface_num,
     MSG_SEND_ASSIGN_STRING_LEN(onekey_board_version, board_version,
                                strlen(board_version));
 
-    int boot_version_len = strlen((VERSTR(VERSION_MAJOR) "." VERSTR(
-        VERSION_MINOR) "." VERSTR(VERSION_PATCH)));
-    MSG_SEND_ASSIGN_STRING_LEN(onekey_boot_version,
-                               (VERSTR(VERSION_MAJOR) "." VERSTR(
-                                   VERSION_MINOR) "." VERSTR(VERSION_PATCH)),
-                               boot_version_len);
+    char *boot_version = (VERSTR(VERSION_MAJOR) "." VERSTR(
+        VERSION_MINOR) "." VERSTR(VERSION_PATCH));
+    MSG_SEND_ASSIGN_STRING_LEN(onekey_boot_version, boot_version,
+                               strlen(boot_version));
+
     MSG_SEND_ASSIGN_VALUE(onekey_device_type, OneKeyDeviceType_TOUCH);
     MSG_SEND_ASSIGN_VALUE(onekey_se_type, OneKeySeType_SE608A);
   }
@@ -413,12 +414,9 @@ static void send_msg_features_ex(uint8_t iface_num,
 
   if (vhdr && hdr) {
     const char *ver_str = format_ver("%d.%d.%d", hdr->onekey_version);
-    MSG_SEND_ASSIGN_STRING_LEN(onekey_firmware_version, ver_str, 5);
-#ifdef EMULATOR
-    uint8_t *fimware_hash = "firmware_hash_emulator";
-#else
+    MSG_SEND_ASSIGN_STRING_LEN(onekey_firmware_version, ver_str,
+                               strlen(ver_str));
     uint8_t *fimware_hash = get_firmware_hash();
-#endif
     MSG_SEND_ASSIGN_BYTES(onekey_firmware_hash, fimware_hash, 32);
   }
   if (ble_name_state()) {
@@ -440,12 +438,11 @@ static void send_msg_features_ex(uint8_t iface_num,
   uint8_t *board_hash = get_boardloader_hash();
   MSG_SEND_ASSIGN_BYTES(onekey_board_hash, board_hash, 32);
 
-  int boot_version_len = strlen((VERSTR(VERSION_MAJOR) "." VERSTR(
-      VERSION_MINOR) "." VERSTR(VERSION_PATCH)));
-  MSG_SEND_ASSIGN_STRING_LEN(onekey_boot_version,
-                             (VERSTR(VERSION_MAJOR) "." VERSTR(
-                                 VERSION_MINOR) "." VERSTR(VERSION_PATCH)),
-                             boot_version_len);
+  char *boot_version = (VERSTR(VERSION_MAJOR) "." VERSTR(
+      VERSION_MINOR) "." VERSTR(VERSION_PATCH));
+  MSG_SEND_ASSIGN_STRING_LEN(onekey_boot_version, boot_version,
+                             strlen(boot_version));
+
   uint8_t *boot_hash = get_bootloader_hash();
   MSG_SEND_ASSIGN_BYTES(onekey_boot_hash, boot_hash, 32);
   MSG_SEND_ASSIGN_STRING_LEN(onekey_boot_build_id, (char *)BUILD_COMMIT,

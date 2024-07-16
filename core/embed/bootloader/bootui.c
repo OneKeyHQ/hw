@@ -63,9 +63,11 @@ extern secbool load_vendor_header_keys(const uint8_t *const data,
 #define COLOR_BL_BG COLOR_BLACK                    // background
 #define COLOR_BL_FG COLOR_WHITE                    // foreground
 #define COLOR_BL_FAIL RGB16(0xFF, 0x00, 0x00)      // red
+#define COLOR_BL_DANGER RGB16(0xFF, 0x11, 0x00)    // onekey red
 #define COLOR_BL_DONE RGB16(0x00, 0xFF, 0x33)      // green
 #define COLOR_BL_PROCESS RGB16(0x4A, 0x90, 0xE2)   // blue
 #define COLOR_BL_GRAY RGB16(0x99, 0x99, 0x99)      // gray
+#define COLOR_BL_DARK RGB16(0x2D, 0x2D, 0x2D)      // gray
 #define COLOR_BL_ICON RGB16(0x33, 0x33, 0x33)      // gray
 #define COLOR_BL_TAGVALUE RGB16(0xB4, 0xB4, 0xB4)  //
 #define COLOR_BL_SUBTITLE RGB16(0xD2, 0xD2, 0xD2)  //
@@ -835,7 +837,7 @@ void ui_bootloader_first(const image_header *const hdr) {
                       FONT_PJKS_BOLD_26, COLOR_BL_FG, COLOR_BL_ICON);
 }
 
-void ui_bootloader_second(const image_header *const hdr) {
+void ui_bootloader_view_details(const image_header *const hdr) {
   ui_bootloader_page_current = 1;
 
   int offset_x = 8, offset_y = 90, offset_seg = 44, offset_line = 30;
@@ -916,14 +918,39 @@ void ui_bootloader_second(const image_header *const hdr) {
   display_text(offset_x, offset_y, BUILD_ID + strlen(BUILD_ID) - 7, -1,
                FONT_NORMAL, COLOR_BL_TAGVALUE, COLOR_BL_BG);
 
-  display_bar(8, 694, 231, 98, COLOR_BL_ICON);
+  display_bar(8, 694, 231, 98, COLOR_BL_DARK);
   display_text_center(DISPLAY_RESX / 4, 755, "Back", -1, FONT_PJKS_BOLD_26,
-                      COLOR_BL_FG, COLOR_BL_ICON);
-  display_bar(241, 694, 231, 98, COLOR_BL_ICON);
+                      COLOR_BL_FG, COLOR_BL_DARK);
+  display_bar(241, 694, 231, 98, COLOR_BL_DANGER);
   display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "Restart", -1,
-                      FONT_PJKS_BOLD_26, COLOR_BL_DONE, COLOR_BL_ICON);
+                      FONT_PJKS_BOLD_26, COLOR_BL_BG, COLOR_BL_DANGER);
 }
 
+void ui_bootloader_restart_confirm(void) {
+  ui_bootloader_page_current = 4;
+
+  ui_title_update();
+  int title_offset_y = 90;
+  int title_offset_x = 12;
+  display_text(title_offset_x, title_offset_y, "Restart  Device?", -1,
+               FONT_PJKS_BOLD_38, COLOR_BL_FG, COLOR_BL_BG);
+
+  display_text(title_offset_x, title_offset_y + 46,
+               "Restarting  will  exit  the  device  from", -1, FONT_NORMAL,
+               COLOR_BL_SUBTITLE, COLOR_BL_BG);
+  display_text(title_offset_x, title_offset_y + 76,
+               "update  mode  and  interrupt  the", -1, FONT_NORMAL,
+               COLOR_BL_SUBTITLE, COLOR_BL_BG);
+  display_text(title_offset_x, title_offset_y + 106, "upgrade  process.", -1,
+               FONT_NORMAL, COLOR_BL_SUBTITLE, COLOR_BL_BG);
+
+  display_bar(8, 694, 231, 98, COLOR_BL_DARK);
+  display_text_center(DISPLAY_RESX / 4, 755, "Cancel", -1, FONT_PJKS_BOLD_26,
+                      COLOR_BL_FG, COLOR_BL_DARK);
+  display_bar(241, 694, 231, 98, COLOR_BL_DANGER);
+  display_text_center(DISPLAY_RESX - DISPLAY_RESX / 4, 755, "Restart", -1,
+                      FONT_PJKS_BOLD_26, COLOR_BL_BG, COLOR_BL_DANGER);
+}
 void ui_bootloader_factory(void) {
   display_image(203, 108, 74, 74, toi_icon_onekey_74x74 + 12,
                 sizeof(toi_icon_onekey_74x74) - 12);
@@ -953,7 +980,7 @@ void ui_bootloader_page_switch(const image_header *const hdr) {
     response = ui_input_poll(INPUT_NEXT, false);
     if (INPUT_NEXT == response) {
       display_clear();
-      ui_bootloader_second(hdr);
+      ui_bootloader_view_details(hdr);
     }
     if (!ble_name_show && ble_name_state()) {
       ui_bootloader_first(hdr);
@@ -969,7 +996,8 @@ void ui_bootloader_page_switch(const image_header *const hdr) {
       display_clear();
       ui_bootloader_first(hdr);
     } else if (INPUT_RESTART == response) {
-      HAL_NVIC_SystemReset();
+      display_clear();
+      ui_bootloader_restart_confirm();
     } else if (INPUT_VERSION_INFO == response) {
       click++;
       click_pre = click_now;
@@ -991,6 +1019,14 @@ void ui_bootloader_page_switch(const image_header *const hdr) {
     if (click_now - click_pre > (1000 * 3)) {
       display_clear();
       ui_bootloader_first(hdr);
+    }
+  } else if (ui_bootloader_page_current == 4) {
+    response = ui_input_poll(INPUT_PREVIOUS | INPUT_RESTART, false);
+    if (INPUT_PREVIOUS == response) {
+      display_clear();
+      ui_bootloader_view_details(hdr);
+    } else if (INPUT_RESTART == response) {
+      HAL_NVIC_SystemReset();
     }
   }
 }
