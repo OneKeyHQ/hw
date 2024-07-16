@@ -3864,13 +3864,14 @@ void layoutDeviceParameters(int num) {
   char bt_ver[32] = "";
   uint8_t hash[32] = {0};
   char hash_str[8] = {0};
+  const char *build_id = BUILD_ID;
   const image_header *hdr = (const image_header *)FLASH_PTR(
       FLASH_FWHEADER_START);  // allow both v2 and v3 signatures
 
   data2hexaddr(get_firmware_hash(hdr), 4, hash_str);
   hash_str[7] = 0;
   snprintf(firmware_ver, 32, "%s[%s-%s]", ONEKEY_VERSION,
-           BUILD_ID + strlen(BUILD_ID) - 7, hash_str);
+           build_id + strlen(BUILD_ID) - 7, hash_str);
 
   memory_bootloader_hash(hash);
   data2hexaddr(hash, 4, hash_str);

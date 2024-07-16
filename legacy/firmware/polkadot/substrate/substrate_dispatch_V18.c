@@ -47,6 +47,7 @@ __Z_INLINE parser_error_t _readMethod_balances_transfer_joy(
   return parser_ok;
 }
 
+/*
 __Z_INLINE parser_error_t _readMethod_balances_force_transfer_joy(
     parser_context_t* c, pd_balances_force_transfer_V18_t* m) {
   m->source.value = 0;
@@ -56,7 +57,7 @@ __Z_INLINE parser_error_t _readMethod_balances_force_transfer_joy(
   CHECK_ERROR(_readCompactBalance(c, &m->amount))
   return parser_ok;
 }
-
+*/
 __Z_INLINE parser_error_t _readMethod_balances_transfer_keep_alive_joystream(
     parser_context_t* c, pd_balances_transfer_keep_alive_V18_t* m) {
   m->dest.value = 0;
