@@ -2028,6 +2028,7 @@ if TYPE_CHECKING:
         message: "bytes"
         derivation_type: "CardanoDerivationType"
         network_id: "int"
+        address_type: "CardanoAddressType | None"
 
         def __init__(
             self,
@@ -2036,6 +2037,7 @@ if TYPE_CHECKING:
             derivation_type: "CardanoDerivationType",
             network_id: "int",
             address_n: "list[int] | None" = None,
+            address_type: "CardanoAddressType | None" = None,
         ) -> None:
             pass
 

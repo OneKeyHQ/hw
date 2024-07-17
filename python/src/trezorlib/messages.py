@@ -3278,6 +3278,7 @@ class CardanoSignMessage(protobuf.MessageType):
         2: protobuf.Field("message", "bytes", repeated=False, required=True),
         3: protobuf.Field("derivation_type", "CardanoDerivationType", repeated=False, required=True),
         4: protobuf.Field("network_id", "uint32", repeated=False, required=True),
+        5: protobuf.Field("address_type", "CardanoAddressType", repeated=False, required=False),
     }
 
     def __init__(
@@ -3287,11 +3288,13 @@ class CardanoSignMessage(protobuf.MessageType):
         derivation_type: "CardanoDerivationType",
         network_id: "int",
         address_n: Optional[Sequence["int"]] = None,
+        address_type: Optional["CardanoAddressType"] = None,
     ) -> None:
         self.address_n: Sequence["int"] = address_n if address_n is not None else []
         self.message = message
         self.derivation_type = derivation_type
         self.network_id = network_id
+        self.address_type = address_type
 
 
 class CardanoMessageSignature(protobuf.MessageType):

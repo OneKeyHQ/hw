@@ -509,6 +509,7 @@ message CardanoSignTxFinished {
     required bytes message = 2;
     required CardanoDerivationType derivation_type = 3;
     required uint32 network_id = 4;                                 // network id - mainnet or testnet
+    optional CardanoAddressType address_type = 5;
 }
 
 /**
