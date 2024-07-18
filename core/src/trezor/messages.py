@@ -8006,9 +8006,9 @@ if TYPE_CHECKING:
         jetton_master_address: "str | None"
         ton_amount: "int"
         jetton_amount: "int | None"
-        fwd_fee: "int | None"
+        fwd_fee: "int"
         comment: "str | None"
-        mode: "int | None"
+        mode: "int"
         seqno: "int"
         expire_at: "int"
         wallet_version: "TonWalletVersion"
@@ -8043,12 +8043,12 @@ if TYPE_CHECKING:
             return isinstance(msg, cls)
 
     class TonSignedMessage(protobuf.MessageType):
-        signature: "bytes | None"
+        signature: "bytes"
 
         def __init__(
             self,
             *,
-            signature: "bytes | None" = None,
+            signature: "bytes",
         ) -> None:
             pass
 

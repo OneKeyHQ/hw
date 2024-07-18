@@ -9850,7 +9850,7 @@ class TonGetAddress(protobuf.MessageType):
     FIELDS = {
         1: protobuf.Field("address_n", "uint32", repeated=True, required=False, default=None),
         2: protobuf.Field("show_display", "bool", repeated=False, required=False, default=None),
-        3: protobuf.Field("wallet_version", "TonWalletVersion", repeated=False, required=False, default=TonWalletVersion.V3R2),
+        3: protobuf.Field("wallet_version", "TonWalletVersion", repeated=False, required=False, default=TonWalletVersion.V4R2),
         4: protobuf.Field("is_bounceable", "bool", repeated=False, required=False, default=True),
         5: protobuf.Field("is_testnet_only", "bool", repeated=False, required=False, default=False),
         6: protobuf.Field("workchain", "TonWorkChain", repeated=False, required=False, default=TonWorkChain.BASECHAIN),
@@ -9862,7 +9862,7 @@ class TonGetAddress(protobuf.MessageType):
         *,
         address_n: Optional[Sequence["int"]] = None,
         show_display: Optional["bool"] = None,
-        wallet_version: Optional["TonWalletVersion"] = TonWalletVersion.V3R2,
+        wallet_version: Optional["TonWalletVersion"] = TonWalletVersion.V4R2,
         is_bounceable: Optional["bool"] = True,
         is_testnet_only: Optional["bool"] = False,
         workchain: Optional["TonWorkChain"] = TonWorkChain.BASECHAIN,
@@ -9902,12 +9902,12 @@ class TonSignMessage(protobuf.MessageType):
         3: protobuf.Field("jetton_master_address", "string", repeated=False, required=False, default=None),
         4: protobuf.Field("ton_amount", "uint64", repeated=False, required=True),
         5: protobuf.Field("jetton_amount", "uint64", repeated=False, required=False, default=None),
-        6: protobuf.Field("fwd_fee", "uint64", repeated=False, required=False, default=None),
+        6: protobuf.Field("fwd_fee", "uint64", repeated=False, required=False, default=0),
         7: protobuf.Field("comment", "string", repeated=False, required=False, default=None),
-        8: protobuf.Field("mode", "uint32", repeated=False, required=False, default=None),
+        8: protobuf.Field("mode", "uint32", repeated=False, required=False, default=3),
         9: protobuf.Field("seqno", "uint32", repeated=False, required=True),
         10: protobuf.Field("expire_at", "uint32", repeated=False, required=True),
-        11: protobuf.Field("wallet_version", "TonWalletVersion", repeated=False, required=False, default=TonWalletVersion.V3R2),
+        11: protobuf.Field("wallet_version", "TonWalletVersion", repeated=False, required=False, default=TonWalletVersion.V4R2),
         12: protobuf.Field("wallet_id", "uint32", repeated=False, required=False, default=698983191),
         13: protobuf.Field("workchain", "TonWorkChain", repeated=False, required=False, default=TonWorkChain.BASECHAIN),
         14: protobuf.Field("is_bounceable", "bool", repeated=False, required=False, default=False),
@@ -9924,10 +9924,10 @@ class TonSignMessage(protobuf.MessageType):
         address_n: Optional[Sequence["int"]] = None,
         jetton_master_address: Optional["str"] = None,
         jetton_amount: Optional["int"] = None,
-        fwd_fee: Optional["int"] = None,
+        fwd_fee: Optional["int"] = 0,
         comment: Optional["str"] = None,
-        mode: Optional["int"] = None,
-        wallet_version: Optional["TonWalletVersion"] = TonWalletVersion.V3R2,
+        mode: Optional["int"] = 3,
+        wallet_version: Optional["TonWalletVersion"] = TonWalletVersion.V4R2,
         wallet_id: Optional["int"] = 698983191,
         workchain: Optional["TonWorkChain"] = TonWorkChain.BASECHAIN,
         is_bounceable: Optional["bool"] = False,
@@ -9953,13 +9953,13 @@ class TonSignMessage(protobuf.MessageType):
 class TonSignedMessage(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = 11904
     FIELDS = {
-        1: protobuf.Field("signature", "bytes", repeated=False, required=False, default=None),
+        1: protobuf.Field("signature", "bytes", repeated=False, required=True),
     }
 
     def __init__(
         self,
         *,
-        signature: Optional["bytes"] = None,
+        signature: "bytes",
     ) -> None:
         self.signature = signature
 

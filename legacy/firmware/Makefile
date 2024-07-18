@@ -141,6 +141,9 @@ OBJS += lnurl.o
 OBJS += nervos.o
 OBJS += dynex.o
 OBJS += ton.o
+OBJS += ton_bits.o
+OBJS += ton_cell.o
+OBJS += ton_tokens.o
 endif
 
 OBJS += debug.o
