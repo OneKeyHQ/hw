@@ -21,7 +21,7 @@ class Compact(ScaleType):
         elif byte_mod == 2:
             self.compact_length = 4
         else:
-            self.compact_length = int(5 + (compact_byte[0] - 3) >> 2)
+            self.compact_length = int(5 + ((compact_byte[0] - 3) >> 2))
 
         if self.compact_length == 1:
             self.compact_bytes = compact_byte
