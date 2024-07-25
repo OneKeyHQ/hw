@@ -44,7 +44,7 @@ const char *languages[][2] = {
     //
     {"Access hidden wallet?", "使用隐藏钱包?"},
     // layout2.c
-    {"Acitve", "激活"},
+    {"Active", "激活"},
     // fsm.c
     {"Action cancelled by user", ""},  // msg
     // fsm_msg_coin.h fsm_msg_lisk.h
@@ -300,7 +300,7 @@ const char *languages[][2] = {
     {"Deposit", "存款"},
     {"Deposit Amount", "存款金额"},
     {"Deposit Denomination", "存款面值"},
-    {"Depositer", "存款方"},
+    {"Depositor", "存款方"},
     {"Description", "描述"},
     {"Destination Address", "目标地址"},
     {"Destination Coins", "来源金额"},

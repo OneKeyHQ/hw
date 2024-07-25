@@ -1479,10 +1479,10 @@ void layoutPublicKey(const uint8_t *pubkey) {
 }
 
 static void _layout_xpub(const char *xpub, const char *desc, int page) {
-  // 21 characters per line, 4 lines, minus 3 chars for "..." = 81
-  // skip 81 characters per page
-  xpub += page * 81;
-  const char **str = split_message((const uint8_t *)xpub, strlen(xpub), 21);
+  // 20 characters per line, 4 lines, minus 3 chars for "..." = 77
+  // skip 77 characters per page
+  xpub += page * 77;
+  const char **str = split_message((const uint8_t *)xpub, strlen(xpub), 20);
   oledDrawString(0, 0 * 9, desc, FONT_STANDARD);
   for (int i = 0; i < 4; i++) {
     oledDrawString(0, (i + 1) * 9 + 4, str[i], FONT_FIXED);
