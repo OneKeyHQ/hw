@@ -1009,7 +1009,7 @@ check_word:
   } else {
     layoutDialogSwipeCenterAdapter(
         &bmp_icon_ok, NULL, NULL, &bmp_bottom_right_arrow, NULL, NULL, NULL,
-        NULL, NULL, _("Awesome!"), _("You wallet is restored."), NULL);
+        NULL, NULL, _("Awesome!"), _("Your wallet is restored."), NULL);
     while (1) {
       key = protectWaitKey(0, 1);
       if (key == KEY_CONFIRM) {

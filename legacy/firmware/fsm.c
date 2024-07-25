@@ -160,6 +160,38 @@ static uint32_t unlock_path = 0;
     return;                                                     \
   }
 
+bool button_request(const ButtonRequestType code) {
+  bool result = false;
+  ButtonRequest resp = {0};
+  resp.has_code = true;
+  resp.code = code;
+  usbTiny(1);
+  buttonUpdate();  // Clear button state
+  msg_write(MessageType_MessageType_ButtonRequest, &resp);
+  for (;;) {
+    usbPoll();
+
+    // check for ButtonAck
+    if (msg_tiny_id == MessageType_MessageType_ButtonAck) {
+      msg_tiny_id = 0xFFFF;
+      result = true;
+      break;
+    }
+
+    // check for Cancel / Initialize
+    protectAbortedByCancel = (msg_tiny_id == MessageType_MessageType_Cancel);
+    protectAbortedByInitialize =
+        (msg_tiny_id == MessageType_MessageType_Initialize);
+    if (protectAbortedByCancel || protectAbortedByInitialize) {
+      msg_tiny_id = 0xFFFF;
+      result = false;
+      break;
+    }
+  }
+  usbTiny(0);
+  return result;
+}
+
 void fsm_sendSuccess(const char *text) {
   RESP_INIT(Success);
   if (text) {
@@ -319,13 +351,15 @@ static bool fsm_layoutAddress(const char *address, const char *address_type,
                               int multisig_index, uint32_t multisig_xpub_magic,
                               const CoinInfo *coin) {
   (void)prefixlen;
-  bool button_request = true;
   uint8_t key = KEY_NULL;
   int screen = 0, screens = 3;
   if (multisig) {
     screens += cryptoMultisigPubkeyCount(multisig);
   }
-
+  if (!button_request(ButtonRequestType_ButtonRequest_Address)) {
+    fsm_sendFailure(FailureType_Failure_ActionCancelled, NULL);
+    return false;
+  }
   for (;;) {
     key = KEY_NULL;
     switch (screen) {
@@ -381,13 +415,11 @@ static bool fsm_layoutAddress(const char *address, const char *address_type,
     }
 
     if ((key == KEY_NULL) && (!protectAbortedBySleep)) {
-      key = protectWaitKeyValue(ButtonRequestType_ButtonRequest_Address,
-                                button_request, 0, 1);
+      key = protectWaitKey(0, 1);
       if (protectAbortedByInitialize) {
         fsm_sendFailure(FailureType_Failure_ActionCancelled, NULL);
         return false;
       }
-      button_request = false;
     }
 
     if (key == KEY_CONFIRM) {
@@ -425,7 +457,6 @@ static bool fsm_layoutAddress(const char *address, const char *address_type,
       }
     }
 
-    if (g_bIsBixinAPP) button_request = false;
     if (protectAbortedByCancel || protectAbortedByInitialize) {
       fsm_sendFailure(FailureType_Failure_ActionCancelled, NULL);
       layoutHome();

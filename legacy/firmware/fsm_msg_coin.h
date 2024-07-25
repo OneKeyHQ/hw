@@ -402,7 +402,7 @@ void fsm_msgSignMessage(const SignMessage *msg) {
 void fsm_msgVerifyMessage(const VerifyMessage *msg) {
   const CoinInfo *coin = fsm_getCoin(msg->has_coin_name, msg->coin_name);
   if (!coin) return;
-  layoutProgressSwipe(_("Verifying"), 0);
+  layoutProgressSwipe(_("Verifying..."), 0);
   if (msg->signature.size != 65) {
     fsm_sendFailure(FailureType_Failure_ProcessError, _("Invalid signature"));
     layoutHome();

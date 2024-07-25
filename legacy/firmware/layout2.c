@@ -1719,12 +1719,8 @@ uint8_t layoutXPUBMultisig(const char *header, const char *xpub, int xpub_index,
 
   layoutLast = layoutXPUBMultisig;
   char desc[32] = {0};
-  if (ours) {
-    snprintf(desc, 32, "xPub #%d (%s)", xpub_index + 1, _("cosigner"));
-  } else {
-    snprintf(desc, 32, "xPub #%d (%s)", xpub_index + 1, _("mine"));
-  }
-
+  snprintf(desc, 32, "xPub #%d (%s)", xpub_index + 1,
+           ours ? _("mine") : _("cosigner"));
   if (rowcount > 3) {
     const char **str = split_message((const uint8_t *)xpub, xpublen, rowlen);
 
@@ -2264,8 +2260,8 @@ bool layoutConfirmSafetyChecks(SafetyCheckLevel safety_ckeck_level,
     page2:
       layoutDialogCenterAdapterV2(
           "Safety Checks", NULL, &bmp_bottom_left_close,
-          &bmp_bottom_right_arrow_off, &bmp_bottom_middle_arrow_down,
-          &bmp_bottom_middle_arrow_up, "protect you from non-",
+          &bmp_bottom_right_arrow_off, &bmp_bottom_middle_arrow_up,
+          &bmp_bottom_middle_arrow_down, "protect you from non-",
           "standard (non-BIP-44", "compliant) address",
           "derivation, performing", NULL);
       drawScrollbar(5, 1);
@@ -2280,8 +2276,8 @@ bool layoutConfirmSafetyChecks(SafetyCheckLevel safety_ckeck_level,
     page3:
       layoutDialogCenterAdapterV2(
           "Safety Checks", NULL, &bmp_bottom_left_close,
-          &bmp_bottom_right_arrow_off, &bmp_bottom_middle_arrow_down,
-          &bmp_bottom_middle_arrow_up, "standard (non-BIP-44",
+          &bmp_bottom_right_arrow_off, &bmp_bottom_middle_arrow_up,
+          &bmp_bottom_middle_arrow_down, "standard (non-BIP-44",
           "compliant) address", "derivation, performing", "potentially risky",
           NULL);
       drawScrollbar(5, 2);
@@ -3870,7 +3866,7 @@ void layoutDeviceParameters(int num) {
   data2hexaddr(get_firmware_hash(hdr), 4, hash_str);
   hash_str[7] = 0;
   snprintf(firmware_ver, 32, "%s[%s-%s]", ONEKEY_VERSION,
-           BUILD_ID + strlen(BUILD_ID) - 7, hash_str);
+           (char *)BUILD_ID + strlen(BUILD_ID) - 7, hash_str);
 
   memory_bootloader_hash(hash);
   data2hexaddr(hash, 4, hash_str);

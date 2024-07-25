@@ -157,7 +157,7 @@ const uint8_t WIPE_CODE_EMPTY[] = {0, 0, 0, 0};
 #define GUARD_KEY_MODULUS 6311
 #define GUARD_KEY_REMAINDER 15
 
-const char *const VERIFYING_PIN_MSG = "Verifing...";
+const char *const VERIFYING_PIN_MSG = "Verifying...";
 const char *const PROCESSING_MSG = "Processing...";
 const char *const STARTING_MSG = "Starting...";
 

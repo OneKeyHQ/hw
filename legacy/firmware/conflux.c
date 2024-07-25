@@ -598,24 +598,6 @@ void conflux_signing_init(ConfluxSignTx *msg, const HDNode *node) {
     }
   }
 
-  if ((token == NULL) && (data_total > 0)) {
-    char to_str[52] = {0};
-    if (toset) {
-      get_base32_encode_address(pubkeyhash, to_str, sizeof(to_str),
-                                msg->chain_id, true);
-    } else {
-      strlcpy(to_str, _("to new contract?"), sizeof(to_str));
-    }
-
-    if (!layoutBlindSign("Conflux", true, to_str, signer,
-                         msg->data_initial_chunk.bytes, data_total, NULL, NULL,
-                         NULL, NULL, NULL, NULL)) {
-      fsm_sendFailure(FailureType_Failure_ActionCancelled, "Signing cancelled");
-      layoutHome();
-      return;
-    }
-  }
-
   /* Stage 1: Calculate total RLP length */
   uint32_t rlp_length = 0;
 

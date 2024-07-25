@@ -55,7 +55,7 @@ const char *const languages[][2] = {
     // ada.c
     {"Account:", "账号:"},
     // layout2.c
-    {"Acitve", "激活"},
+    {"Active", "激活"},
     // fsm_msg_coin.h fsm_msg_lisk.h
     {"Address:", "地址:"},
     //
@@ -288,7 +288,7 @@ const char *const languages[][2] = {
     {"Deposit", "存款"},
     {"Deposit Amount", "存款金额"},
     {"Deposit Denomination", "存款面值"},
-    {"Depositer", "存款方"},
+    {"Depositor", "存款方"},
     {"Description", "描述"},
     {"Destination Address", "目标地址"},
     {"Destination Coins", "来源金额"},
@@ -861,7 +861,7 @@ const char *const languages[][2] = {
     // layout2.c
     {"Verified message", "验证信息"},
     // storage.c
-    {"Verifing...", "验证中..."},
+    {"Verifying...", "验证中..."},
     // layout2.c
     {"View Data", "查看数据"},
     // cosmos.c
@@ -910,9 +910,10 @@ const char *const languages[][2] = {
     {"Yes", "是"},
     //
     {"You still have 9 times", "连续输入10次将重置设备"},
-    {"You wallet is restored.", "钱包恢复成功."},
     // reset.c
     {"Your backup is complete.", "助记词备份成功."},
+    {"Your wallet is restored.", "钱包恢复成功."},
+
     // layout2.c
     {"active device", "激活设备"},
     // layout2.c
