@@ -651,7 +651,7 @@ static void rx_callback(usbd_device *dev, uint8_t ep) {
         w25qxx_write_buffer_unsafe((uint8_t *)FW_HEADER,
                                    SPI_FLASH_FIRMWARE_ADDR_START,
                                    FLASH_FWHEADER_LEN);
-        layoutProgress("Verifing ... Please\nwait", 500);
+        layoutProgress("Verifying ... Please\nwait", 500);
         update_from_spi_flash();
       }
 #else

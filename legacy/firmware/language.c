@@ -1035,7 +1035,7 @@ const char *languages[][2] = {
     {"Verify Public Key", "校验公钥"},
     {"Verify Specified Word", "自由核对"},
     // fsm_msg_coin.h
-    {"Verifying", ""},
+    {"Verifying", "验证中"},
     // storage.c
     {"Verifying PIN", "校验PIN"},
     // signing.c
