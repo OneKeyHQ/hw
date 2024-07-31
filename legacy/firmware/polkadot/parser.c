@@ -15,18 +15,40 @@
 #define FIELD_BLOCK_HASH 6
 
 #define EXPERT_FIELDS_TOTAL_COUNT 5
+extern uint16_t __address_type;
+#define POLKADOT_PARSER_PARSE_V26 \
+  polkadot_parser_parse_dispatch(ctx, data, dataLen, tx_obj, true);
+#define POLKADOT_PARSER_PARSE_V25 \
+  polkadot_parser_parse_dispatch(ctx, data, dataLen, tx_obj, false);
 
-parser_error_t polkadot_parser_parse(parser_context_t *ctx, const uint8_t *data,
-                                     size_t dataLen, parser_tx_t *tx_obj) {
+static parser_error_t polkadot_parser_parse_dispatch(parser_context_t *ctx,
+                                                     const uint8_t *data,
+                                                     size_t dataLen,
+                                                     parser_tx_t *tx_obj,
+                                                     bool mode_enabled) {
   CHECK_PARSER_ERR(polkadot_parser_init(ctx, data, dataLen))
+  memzero(tx_obj, sizeof(parser_tx_t));
   ctx->tx_obj = tx_obj;
   ctx->tx_obj->nestCallIdx.slotIdx = 0;
   ctx->tx_obj->nestCallIdx._lenBuffer = 0;
   ctx->tx_obj->nestCallIdx._ptr = NULL;
   ctx->tx_obj->nestCallIdx._nextPtr = NULL;
   ctx->tx_obj->nestCallIdx.isTail = true;
-  parser_error_t err = _polkadot_readTx(ctx, ctx->tx_obj);
+  parser_error_t err = _polkadot_readTx(ctx, ctx->tx_obj, mode_enabled);
 
+  return err;
+}
+
+parser_error_t polkadot_parser_parse(parser_context_t *ctx, const uint8_t *data,
+                                     size_t dataLen, parser_tx_t *tx_obj) {
+  __address_type = _detectAddressType(ctx);
+  parser_error_t err = POLKADOT_PARSER_PARSE_V26;
+  if (err != parser_ok && err != parser_unexpected_callIndex) {
+    err = POLKADOT_PARSER_PARSE_V25;
+    if (err != parser_ok && err != parser_unexpected_callIndex) {
+      return parser_tx_version_not_supported;
+    }
+  }
   return err;
 }
 

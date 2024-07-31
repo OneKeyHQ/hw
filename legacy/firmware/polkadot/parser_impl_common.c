@@ -244,94 +244,97 @@ parser_error_t _toStringCompactBalance(const pd_CompactBalance_t *v,
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-static parser_error_t _checkVersionsV26(parser_context_t *c) {
-  // Methods are not length delimited so in order to retrieve the specVersion
-  // it is necessary to parse from the back.
-  // The transaction is expect to end in
-  // [4 bytes] specVersion
-  // [4 bytes] transactionVersion
-  // [32 bytes] genesisHash
-  // [32 bytes] blockHash
-  // [1 / 33 bytes] opt<checkMetadataHash> --> Only None is supported
-  const uint16_t specOffsetFromBack = 4 + 4 + 32 + 32 + 1;
-  if (c->bufferLen < specOffsetFromBack) {
-    return parser_unexpected_buffer_end;
-  }
+// static parser_error_t _checkVersionsV26(parser_context_t *c) {
+//   // Methods are not length delimited so in order to retrieve the specVersion
+//   // it is necessary to parse from the back.
+//   // The transaction is expect to end in
+//   // [4 bytes] specVersion
+//   // [4 bytes] transactionVersion
+//   // [32 bytes] genesisHash
+//   // [32 bytes] blockHash
+//   // [1 / 33 bytes] opt<checkMetadataHash> --> Only None is supported
+//   const uint16_t specOffsetFromBack = 4 + 4 + 32 + 32 + 1;
+//   if (c->bufferLen < specOffsetFromBack) {
+//     return parser_unexpected_buffer_end;
+//   }
 
-  uint8_t *p = (uint8_t *)(c->buffer + c->bufferLen - specOffsetFromBack);
-  uint32_t specVersion = 0;
-  specVersion += (uint32_t)p[0] << 0u;
-  specVersion += (uint32_t)p[1] << 8u;
-  specVersion += (uint32_t)p[2] << 16u;
-  specVersion += (uint32_t)p[3] << 24u;
+//   uint8_t *p = (uint8_t *)(c->buffer + c->bufferLen - specOffsetFromBack);
+//   uint32_t specVersion = 0;
+//   specVersion += (uint32_t)p[0] << 0u;
+//   specVersion += (uint32_t)p[1] << 8u;
+//   specVersion += (uint32_t)p[2] << 16u;
+//   specVersion += (uint32_t)p[3] << 24u;
 
-  p += 4;
-  uint32_t transactionVersion = 0;
-  transactionVersion += (uint32_t)p[0] << 0u;
-  transactionVersion += (uint32_t)p[1] << 8u;
-  transactionVersion += (uint32_t)p[2] << 16u;
-  transactionVersion += (uint32_t)p[3] << 24u;
-  if ((transactionVersion != (SUPPORTED_TX_VERSION_CURRENT) ||
-       specVersion < SUPPORTED_MINIMUM_SPEC_VERSION)) {
-    if (transactionVersion != (SUPPORTED_TX_VERSION_CURRENT_MANTA) &&
-        strncmp(polkadot_network, "manta", 5) != 0) {
-      return parser_tx_version_not_supported;
-    }
-  }
-  c->tx_obj->specVersion = specVersion;
-  c->tx_obj->transactionVersion = transactionVersion;
-  c->tx_obj->mode = 0;
-  return parser_ok;
-}
+//   p += 4;
+//   uint32_t transactionVersion = 0;
+//   transactionVersion += (uint32_t)p[0] << 0u;
+//   transactionVersion += (uint32_t)p[1] << 8u;
+//   transactionVersion += (uint32_t)p[2] << 16u;
+//   transactionVersion += (uint32_t)p[3] << 24u;
+//   if ((transactionVersion < (SUPPORTED_TX_VERSION_CURRENT) ||
+//        specVersion < SUPPORTED_MINIMUM_SPEC_VERSION_CURRENT)) {
+//     if (strncmp(polkadot_network, "manta", 5) == 0) {
+//       if (transactionVersion < (SUPPORTED_TX_VERSION_CURRENT_MANTA)) {
+//         return parser_tx_version_not_supported;
+//       }
+//     } else {
+//       return parser_tx_version_not_supported;
+//     }
+//   }
+//   c->tx_obj->specVersion = specVersion;
+//   c->tx_obj->transactionVersion = transactionVersion;
+//   c->tx_obj->mode = 0;
+//   return parser_ok;
+// }
 
-static parser_error_t _checkVersionsV25(parser_context_t *c) {
-  // Methods are not length delimited so in order to retrieve the specVersion
-  // it is necessary to parse from the back.
-  // The transaction is expect to end in
-  // [4 bytes] specVersion
-  // [4 bytes] transactionVersion
-  // [32 bytes] genesisHash
-  // [32 bytes] blockHash
-  const uint16_t specOffsetFromBack = 4 + 4 + 32 + 32;
-  if (c->bufferLen < specOffsetFromBack) {
-    return parser_unexpected_buffer_end;
-  }
+// static parser_error_t _checkVersionsV25(parser_context_t *c) {
+//   // Methods are not length delimited so in order to retrieve the specVersion
+//   // it is necessary to parse from the back.
+//   // The transaction is expect to end in
+//   // [4 bytes] specVersion
+//   // [4 bytes] transactionVersion
+//   // [32 bytes] genesisHash
+//   // [32 bytes] blockHash
+//   const uint16_t specOffsetFromBack = 4 + 4 + 32 + 32;
+//   if (c->bufferLen < specOffsetFromBack) {
+//     return parser_unexpected_buffer_end;
+//   }
 
-  uint8_t *p = (uint8_t *)(c->buffer + c->bufferLen - specOffsetFromBack);
-  uint32_t specVersion = 0;
-  specVersion += (uint32_t)p[0] << 0u;
-  specVersion += (uint32_t)p[1] << 8u;
-  specVersion += (uint32_t)p[2] << 16u;
-  specVersion += (uint32_t)p[3] << 24u;
+//   uint8_t *p = (uint8_t *)(c->buffer + c->bufferLen - specOffsetFromBack);
+//   uint32_t specVersion = 0;
+//   specVersion += (uint32_t)p[0] << 0u;
+//   specVersion += (uint32_t)p[1] << 8u;
+//   specVersion += (uint32_t)p[2] << 16u;
+//   specVersion += (uint32_t)p[3] << 24u;
 
-  p += 4;
-  uint32_t transactionVersion = 0;
-  transactionVersion += (uint32_t)p[0] << 0u;
-  transactionVersion += (uint32_t)p[1] << 8u;
-  transactionVersion += (uint32_t)p[2] << 16u;
-  transactionVersion += (uint32_t)p[3] << 24u;
-  if (transactionVersion > (SUPPORTED_TX_VERSION_PREVIOUS)) {
-    return parser_tx_version_not_supported;
-  }
+//   p += 4;
+//   uint32_t transactionVersion = 0;
+//   transactionVersion += (uint32_t)p[0] << 0u;
+//   transactionVersion += (uint32_t)p[1] << 8u;
+//   transactionVersion += (uint32_t)p[2] << 16u;
+//   transactionVersion += (uint32_t)p[3] << 24u;
+//   if (transactionVersion > (SUPPORTED_TX_VERSION_PREVIOUS)) {
+//     return parser_tx_version_not_supported;
+//   }
 
-  if (specVersion < (SUPPORTED_MINIMUM_SPEC_VERSION)) {
-    return parser_spec_not_supported;
-  }
-  c->tx_obj->specVersion = specVersion;
-  c->tx_obj->transactionVersion = transactionVersion;
+//   if (specVersion < (SUPPORTED_MINIMUM_SPEC_VERSION_PREVIOUS)) {
+//     return parser_spec_not_supported;
+//   }
+//   c->tx_obj->specVersion = specVersion;
+//   c->tx_obj->transactionVersion = transactionVersion;
 
-  return parser_ok;
-}
+//   return parser_ok;
+// }
 
-parser_error_t _checkVersions(parser_context_t *c) {
-  const parser_error_t withoutMode = _checkVersionsV25(c);
-  const parser_error_t modeDisabled = _checkVersionsV26(c);
+// parser_error_t _checkVersions(parser_context_t *c) {
+//   const parser_error_t modeDisabled = _checkVersionsV26(c);
+//   const parser_error_t withoutMode = _checkVersionsV25(c);
 
-  if (withoutMode != parser_ok && modeDisabled != parser_ok) {
-    return parser_tx_version_not_supported;
-  }
-  return parser_ok;
-}
+//   if (withoutMode != parser_ok && modeDisabled != parser_ok) {
+//     return parser_tx_version_not_supported;
+//   }
+//   return parser_ok;
+// }
 
 uint16_t __address_type;
 
