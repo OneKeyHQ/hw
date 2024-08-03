@@ -31,7 +31,7 @@ jobs:
         env:
           PRODUCTION: 1
         run: |
-          sh <(curl -L https://nixos.org/nix/install) --no-daemon
+          sh <(curl -L https://releases.nixos.org/nix/nix-2.23.3/install) --no-daemon
           . $HOME/.nix-profile/etc/profile.d/nix.sh
           nix-shell --run "poetry install"
           git submodule update --init --recursive
