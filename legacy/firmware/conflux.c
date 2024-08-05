@@ -394,15 +394,7 @@ static void layoutConfluxConfirmTx(uint8_t *to, uint32_t to_len,
   bn_read_be(pad_val, &val);
 
   char amount[36] = {0};
-  if (token == NULL) {
-    if (bn_is_zero(&val)) {
-      strcpy(amount, _("message"));
-    } else {
-      confluxFormatAmount(&val, NULL, amount, sizeof(amount));
-    }
-  } else {
-    confluxFormatAmount(&val, token, amount, sizeof(amount));
-  }
+  confluxFormatAmount(&val, token, amount, sizeof(amount));
 
   char _to1[30] = {0};
   char _to2[30] = "______________";
@@ -636,13 +628,8 @@ void conflux_signing_init(ConfluxSignTx *msg, const HDNode *node) {
                            msg->data_initial_chunk.bytes + 36, 32, token,
                            msg->chain_id);
   } else {
-    if (toset) {
-      layoutConfluxConfirmTx(pubkeyhash, 20, msg->value.bytes, msg->value.size,
-                             NULL, msg->chain_id);
-    } else {
-      layoutConfluxConfirmTx(pubkeyhash, 0, msg->value.bytes, msg->value.size,
-                             NULL, msg->chain_id);
-    }
+    layoutConfluxConfirmTx(pubkeyhash, toset ? 20 : 0, msg->value.bytes,
+                           msg->value.size, NULL, msg->chain_id);
   }
 
   if (!protectButton(ButtonRequestType_ButtonRequest_SignTx, false)) {
@@ -651,7 +638,7 @@ void conflux_signing_init(ConfluxSignTx *msg, const HDNode *node) {
     return;
   }
 
-  if (data_total > 0) {
+  if (data_total > 0 && token == NULL) {
     layoutConfluxData(msg->data_initial_chunk.bytes,
                       msg->data_initial_chunk.size, data_total);
     if (!protectButton(ButtonRequestType_ButtonRequest_SignTx, false)) {
@@ -661,15 +648,9 @@ void conflux_signing_init(ConfluxSignTx *msg, const HDNode *node) {
     }
   }
 
-  if (token != NULL) {
-    layoutConfluxFee(msg->value.bytes, msg->value.size, msg->gas_price.bytes,
-                     msg->gas_price.size, msg->gas_limit.bytes,
-                     msg->gas_limit.size, true);
-  } else {
-    layoutConfluxFee(msg->value.bytes, msg->value.size, msg->gas_price.bytes,
-                     msg->gas_price.size, msg->gas_limit.bytes,
-                     msg->gas_limit.size, false);
-  }
+  layoutConfluxFee(msg->value.bytes, msg->value.size, msg->gas_price.bytes,
+                   msg->gas_price.size, msg->gas_limit.bytes,
+                   msg->gas_limit.size, token != NULL);
   if (!protectButton(ButtonRequestType_ButtonRequest_SignTx, false)) {
     fsm_sendFailure(FailureType_Failure_ActionCancelled, NULL);
     conflux_signing_abort();
