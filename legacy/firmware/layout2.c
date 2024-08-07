@@ -1672,7 +1672,7 @@ void layoutShowPassphrase(const char *passphrase) {
     oledClear();
   }
   const char **str =
-      split_message((const uint8_t *)passphrase, strlen(passphrase), 21);
+      split_message((const uint8_t *)passphrase, strlen(passphrase), 20);
   for (int i = 0; i < 3; i++) {
     oledDrawString(0, (i + 1) * 9, str[i], FONT_FIXED);
   }
