@@ -72,3 +72,29 @@ message TonSignMessage {
 message TonSignedMessage {
     required bytes signature = 1;                   // signed transaction message
 }
+
+/**
+ * Request: Require Device to sign proof
+ * @start
+ * @next TonSignedProof
+ * @next Failure
+ */
+message TonSignProof {
+    repeated uint32 address_n = 1;                                  // BIP-32 path to derive the key from master node
+    required bytes appdomain = 2;                                   // dapp address
+    optional bytes comment = 3;                                     // message comment
+    required uint64 expire_at = 4;                                  // message expiration time
+    optional TonWalletVersion wallet_version = 5 [default=V4R2];    // ton wallet version
+    optional uint32 wallet_id = 6 [default=698983191];              // 698983191 is the default subwallet_id value
+    optional TonWorkChain workchain = 7 [default=BASECHAIN];        // 0: BaseChain, 1: MasterChain
+    optional bool is_bounceable = 8 [default=false];                // bounceable flag
+    optional bool is_testnet_only = 9 [default=false];              // testnet only flag
+}
+
+/**
+ * Response: transaction signature corresponding to TonSignProof
+ * @end
+ */
+message TonSignedProof {
+    required bytes signature = 1;                   // signed transaction message
+}

@@ -434,12 +434,6 @@ enum MessageType {
     MessageType_ConfluxSignMessageCIP23 = 10118 [(wire_in) = true];
     MessageType_ConfluxMessageSignature = 10119 [(wire_out) = true];
 
-    // ton
-    MessageType_TonGetAddress = 11901 [(wire_in) = true];
-    MessageType_TonAddress = 11902 [(wire_out) = true];
-    MessageType_TonSignMessage = 11903 [(wire_in) = true];
-    MessageType_TonSignedMessage = 11904 [(wire_out) = true];
-
     // tron
     MessageType_TronGetAddress = 10501 [(wire_in) = true];
     MessageType_TronAddress = 10502 [(wire_out) = true];
@@ -535,6 +529,15 @@ enum MessageType {
     MessageType_DnxInputAck = 11804 [(wire_in) = true];
     MessageType_DnxRTSigsRequest = 11805 [(wire_in) = true];
     MessageType_DnxSignedTx = 11806 [(wire_out) = true];
+
+    // ton
+    MessageType_TonGetAddress = 11901 [(wire_in) = true];
+    MessageType_TonAddress = 11902 [(wire_out) = true];
+    MessageType_TonSignMessage = 11903 [(wire_in) = true];
+    MessageType_TonSignedMessage = 11904 [(wire_out) = true];
+    MessageType_TonSignProof = 11905 [(wire_in) = true];
+    MessageType_TonSignedProof = 11906 [(wire_out) = true];
+
     //onekey
     MessageType_DeviceEraseSector= 10026 [deprecated = true];
 

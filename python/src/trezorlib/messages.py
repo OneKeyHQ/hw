@@ -317,10 +317,6 @@ class MessageType(IntEnum):
     ConfluxSignMessage = 10117
     ConfluxSignMessageCIP23 = 10118
     ConfluxMessageSignature = 10119
-    TonGetAddress = 11901
-    TonAddress = 11902
-    TonSignMessage = 11903
-    TonSignedMessage = 11904
     TronGetAddress = 10501
     TronAddress = 10502
     TronSignTx = 10503
@@ -392,6 +388,12 @@ class MessageType(IntEnum):
     DnxInputAck = 11804
     DnxRTSigsRequest = 11805
     DnxSignedTx = 11806
+    TonGetAddress = 11901
+    TonAddress = 11902
+    TonSignMessage = 11903
+    TonSignedMessage = 11904
+    TonSignProof = 11905
+    TonSignedProof = 11906
     DeviceEraseSector = 10026
 
 
@@ -9952,6 +9954,58 @@ class TonSignMessage(protobuf.MessageType):
 
 class TonSignedMessage(protobuf.MessageType):
     MESSAGE_WIRE_TYPE = 11904
+    FIELDS = {
+        1: protobuf.Field("signature", "bytes", repeated=False, required=True),
+    }
+
+    def __init__(
+        self,
+        *,
+        signature: "bytes",
+    ) -> None:
+        self.signature = signature
+
+
+class TonSignProof(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 11905
+    FIELDS = {
+        1: protobuf.Field("address_n", "uint32", repeated=True, required=False, default=None),
+        2: protobuf.Field("appdomain", "bytes", repeated=False, required=True),
+        3: protobuf.Field("comment", "bytes", repeated=False, required=False, default=None),
+        4: protobuf.Field("expire_at", "uint64", repeated=False, required=True),
+        5: protobuf.Field("wallet_version", "TonWalletVersion", repeated=False, required=False, default=TonWalletVersion.V4R2),
+        6: protobuf.Field("wallet_id", "uint32", repeated=False, required=False, default=698983191),
+        7: protobuf.Field("workchain", "TonWorkChain", repeated=False, required=False, default=TonWorkChain.BASECHAIN),
+        8: protobuf.Field("is_bounceable", "bool", repeated=False, required=False, default=False),
+        9: protobuf.Field("is_testnet_only", "bool", repeated=False, required=False, default=False),
+    }
+
+    def __init__(
+        self,
+        *,
+        appdomain: "bytes",
+        expire_at: "int",
+        address_n: Optional[Sequence["int"]] = None,
+        comment: Optional["bytes"] = None,
+        wallet_version: Optional["TonWalletVersion"] = TonWalletVersion.V4R2,
+        wallet_id: Optional["int"] = 698983191,
+        workchain: Optional["TonWorkChain"] = TonWorkChain.BASECHAIN,
+        is_bounceable: Optional["bool"] = False,
+        is_testnet_only: Optional["bool"] = False,
+    ) -> None:
+        self.address_n: Sequence["int"] = address_n if address_n is not None else []
+        self.appdomain = appdomain
+        self.expire_at = expire_at
+        self.comment = comment
+        self.wallet_version = wallet_version
+        self.wallet_id = wallet_id
+        self.workchain = workchain
+        self.is_bounceable = is_bounceable
+        self.is_testnet_only = is_testnet_only
+
+
+class TonSignedProof(protobuf.MessageType):
+    MESSAGE_WIRE_TYPE = 11906
     FIELDS = {
         1: protobuf.Field("signature", "bytes", repeated=False, required=True),
     }

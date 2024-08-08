@@ -43,6 +43,9 @@ void ton_get_address_from_public_key(const uint8_t *public_key,
 bool ton_sign_message(const TonSignMessage *msg, const HDNode *node,
                         TonSignedMessage *resp);
 
+bool ton_sign_proof(const TonSignProof *msg, const HDNode *node,
+                        TonSignedProof *resp);
+
 uint16_t crc16(uint8_t *ptr, size_t count);
 
 bool base64_decode (char *ctx,

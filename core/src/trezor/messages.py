@@ -8056,6 +8056,50 @@ if TYPE_CHECKING:
         def is_type_of(cls, msg: Any) -> TypeGuard["TonSignedMessage"]:
             return isinstance(msg, cls)
 
+    class TonSignProof(protobuf.MessageType):
+        address_n: "list[int]"
+        appdomain: "bytes"
+        comment: "bytes | None"
+        expire_at: "int"
+        wallet_version: "TonWalletVersion"
+        wallet_id: "int"
+        workchain: "TonWorkChain"
+        is_bounceable: "bool"
+        is_testnet_only: "bool"
+
+        def __init__(
+            self,
+            *,
+            appdomain: "bytes",
+            expire_at: "int",
+            address_n: "list[int] | None" = None,
+            comment: "bytes | None" = None,
+            wallet_version: "TonWalletVersion | None" = None,
+            wallet_id: "int | None" = None,
+            workchain: "TonWorkChain | None" = None,
+            is_bounceable: "bool | None" = None,
+            is_testnet_only: "bool | None" = None,
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["TonSignProof"]:
+            return isinstance(msg, cls)
+
+    class TonSignedProof(protobuf.MessageType):
+        signature: "bytes"
+
+        def __init__(
+            self,
+            *,
+            signature: "bytes",
+        ) -> None:
+            pass
+
+        @classmethod
+        def is_type_of(cls, msg: Any) -> TypeGuard["TonSignedProof"]:
+            return isinstance(msg, cls)
+
     class TronGetAddress(protobuf.MessageType):
         address_n: "list[int]"
         show_display: "bool | None"

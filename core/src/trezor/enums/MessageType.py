@@ -290,10 +290,6 @@ if not utils.BITCOIN_ONLY:
     ConfluxSignMessage = 10117
     ConfluxSignMessageCIP23 = 10118
     ConfluxMessageSignature = 10119
-    TonGetAddress = 11901
-    TonAddress = 11902
-    TonSignMessage = 11903
-    TonSignedMessage = 11904
     TronGetAddress = 10501
     TronAddress = 10502
     TronSignTx = 10503
@@ -365,3 +361,9 @@ if not utils.BITCOIN_ONLY:
     DnxInputAck = 11804
     DnxRTSigsRequest = 11805
     DnxSignedTx = 11806
+    TonGetAddress = 11901
+    TonAddress = 11902
+    TonSignMessage = 11903
+    TonSignedMessage = 11904
+    TonSignProof = 11905
+    TonSignedProof = 11906

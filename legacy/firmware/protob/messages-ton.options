@@ -6,9 +6,14 @@ TonAddress.address                         max_size:49
 
 
 TonSignMessage.address_n                    max_count:8
-TonSignMessage.destination                  max_size:50
-TonSignMessage.jetton_master_address        max_size:50
+TonSignMessage.destination                  max_size:49
+TonSignMessage.jetton_master_address        max_size:49
 TonSignMessage.comment                      max_size:64
 TonSignMessage.wallet_version               max_size:1
 TonSignMessage.workchain                    max_size:1
 TonSignedMessage.signature                  max_size:64
+
+TonSignProof.address_n                      max_count:8
+TonSignProof.appdomain                      max_size:256
+TonSignProof.comment                        max_size:1024
+TonSignedProof.signature                    max_size:64

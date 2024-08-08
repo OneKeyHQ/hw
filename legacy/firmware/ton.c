@@ -226,7 +226,7 @@ bool ton_sign_message(const TonSignMessage *msg, const HDNode *node,
 
     // get address
     char raw_address[32] = {0};
-    char usr_friendly_address[50] = {0};
+    char usr_friendly_address[49] = {0};
     ton_get_address_from_public_key(node->public_key + 1, msg->workchain, msg->is_bounceable, msg->is_testnet_only, raw_address);
     ton_to_user_friendly(msg->workchain, (const char*)raw_address, msg->is_bounceable, msg->is_testnet_only, usr_friendly_address);
 
@@ -318,6 +318,97 @@ bool ton_sign_message(const TonSignMessage *msg, const HDNode *node,
         resp->signature.size = 64;
 
     }
+
+    return true;
+}
+
+bool ton_sign_proof(const TonSignProof *msg, const HDNode *node,
+                        TonSignedProof *resp) {
+    printf("ton_sign_proof\n");
+
+    // get address
+    char raw_address[32] = {0};
+    char usr_friendly_address[49] = {0};
+    ton_get_address_from_public_key(node->public_key + 1, msg->workchain, msg->is_bounceable, msg->is_testnet_only, raw_address);
+    ton_to_user_friendly(msg->workchain, (const char*)raw_address, msg->is_bounceable, msg->is_testnet_only, usr_friendly_address);
+    
+    if (!fsm_layoutSignMessage("Ton", (const char*)usr_friendly_address, msg->comment.bytes,
+                             msg->comment.size)) {
+        fsm_sendFailure(FailureType_Failure_ActionCancelled, NULL);
+        layoutHome();
+        return false;
+    }
+
+    // hash 1
+    SHA256_CTX ctx;
+    sha256_Init(&ctx);
+
+    const char *message_header = "ton-proof-item-v2/";
+    sha256_Update(&ctx, (const uint8_t*)message_header, 18);
+
+    int32_t workchain = (msg->workchain == TonWorkChain_BASECHAIN) ? 0 : -1;
+    int32_t *workchain_ptr = &workchain;
+    const uint8_t *wc = (const uint8_t *)workchain_ptr;
+    sha256_Update(&ctx, wc, 4);
+
+    sha256_Update(&ctx, (const uint8_t *)raw_address, 32);
+
+    uint32_t domain_len = msg->appdomain.size;
+    sha256_Update(&ctx, (const uint8_t *)&domain_len, 4);
+
+    sha256_Update(&ctx, (const uint8_t *)msg->appdomain.bytes, domain_len);
+
+    sha256_Update(&ctx, (const uint8_t *)&msg->expire_at, 8);
+
+    uint32_t comment_len = msg->comment.size;
+    sha256_Update(&ctx, (const uint8_t *)msg->comment.bytes, comment_len);
+
+    uint8_t *message[32] = {0};
+    sha256_Final(&ctx, (uint8_t*)message);
+   
+    /********* test **********/
+    char message_hex[65] = {0};
+    data2hexaddr((const uint8_t *)message, 32, message_hex);
+    printf("\nmessage 1: %s", message_hex);
+    /*************************/
+
+    // hash 2
+    sha256_Init(&ctx);
+    sha256_Update(&ctx, (const uint8_t *)"\xff\xff", 2);
+
+    const char *message_final_header = "ton-connect";
+    sha256_Update(&ctx, (const uint8_t*)message_final_header, 11);
+    /********* test **********/
+    char tmp0[22] = {0};
+    data2hexaddr((const uint8_t *)message_final_header, 11, tmp0);
+    printf("\nheader: %s", tmp0);
+    /*************************/
+
+    sha256_Update(&ctx, (const uint8_t *)message, 32);
+    // /********* test **********/
+    // char message_hex[65] = {0};
+    // data2hexaddr((const uint8_t *)message, 32, message_hex);
+    // printf("\nmessage 1: %s", message_hex);
+    // /*************************/
+
+    uint8_t *message_final[32] = {0};
+    sha256_Final(&ctx, (uint8_t*)message_final);
+
+    /********* test **********/
+    char message_final_hex[65] = {0};
+    data2hexaddr((const uint8_t *)message_final, 32, message_final_hex);
+    printf("\nmessage_final: %s", message_final_hex);
+    /*************************/
+
+    ed25519_sign((const unsigned char*)message_final, SHA256_SIZE, node->private_key,
+            resp->signature.bytes);
+    resp->signature.size = 64;
+
+    /********* test **********/
+    char sig[128] = {0};
+    data2hexaddr((const uint8_t *)resp->signature.bytes, 64, sig);
+    printf("\nsig: %s\n", sig);
+    /*************************/
 
     return true;
 }

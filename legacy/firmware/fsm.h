@@ -330,4 +330,5 @@ void fsm_msgDnxRTSigsRequest(const DnxRTSigsRequest *msg);
 // ton
 void fsm_msgTonGetAddress(const TonGetAddress *msg);
 void fsm_msgTonSignMessage(const TonSignMessage *msg);
+void fsm_msgTonSignProof(const TonSignProof *msg);
 #endif
