@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 #ifndef __TON_BITS_H__
 #define __TON_BITS_H__

@@ -35,9 +35,6 @@ void ton_to_user_friendly(TonWorkChain workchain,
                           char *address);
 
 void ton_get_address_from_public_key(const uint8_t *public_key,
-                                       TonWorkChain workchain,
-                                       bool is_bounceable,
-                                       bool is_testnet_only,
                                        char *address);
 
 bool ton_sign_message(const TonSignMessage *msg, const HDNode *node,

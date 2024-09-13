@@ -110,9 +110,6 @@ void ton_append_data_cell_hash(const uint8_t *public_key, SHA256_CTX *ctx) {
 }
 
 void ton_get_address_from_public_key(const uint8_t *public_key,
-                                       TonWorkChain workchain,
-                                       bool is_bounceable,
-                                       bool is_testnet_only,
                                        char *address) {
     SHA256_CTX ctx;
     sha256_Init(&ctx);
@@ -217,9 +214,9 @@ void ton_format_jetton_amount(const uint64_t amount, char *buf, int buflen, int 
     snprintf(buf, buflen, "%s %s", str_amount, jetton_name);
 }
 
-void ton_get_jetton_name(char *jetton_master_address, char *jetton_name) {
-    // get jetton name
-};
+// void ton_get_jetton_name(char *jetton_master_address, char *jetton_name) {
+//     // get jetton name
+// };
 
 bool ton_sign_message(const TonSignMessage *msg, const HDNode *node,
                         TonSignedMessage *resp) {
@@ -227,7 +224,7 @@ bool ton_sign_message(const TonSignMessage *msg, const HDNode *node,
     // get address
     char raw_address[32] = {0};
     char usr_friendly_address[49] = {0};
-    ton_get_address_from_public_key(node->public_key + 1, msg->workchain, msg->is_bounceable, msg->is_testnet_only, raw_address);
+    ton_get_address_from_public_key(node->public_key + 1, raw_address);
     ton_to_user_friendly(msg->workchain, (const char*)raw_address, msg->is_bounceable, msg->is_testnet_only, usr_friendly_address);
 
     // display
@@ -329,7 +326,7 @@ bool ton_sign_proof(const TonSignProof *msg, const HDNode *node,
     // get address
     char raw_address[32] = {0};
     char usr_friendly_address[49] = {0};
-    ton_get_address_from_public_key(node->public_key + 1, msg->workchain, msg->is_bounceable, msg->is_testnet_only, raw_address);
+    ton_get_address_from_public_key(node->public_key + 1, raw_address);
     ton_to_user_friendly(msg->workchain, (const char*)raw_address, msg->is_bounceable, msg->is_testnet_only, usr_friendly_address);
     
     if (!fsm_layoutSignMessage("Ton", (const char*)usr_friendly_address, msg->comment.bytes,

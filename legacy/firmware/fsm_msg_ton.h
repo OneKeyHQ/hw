@@ -38,7 +38,7 @@ void fsm_msgTonGetAddress(const TonGetAddress *msg) {
   resp->public_key.size = 32;
 
   char raw_address[32] = {0};
-  ton_get_address_from_public_key(node->public_key + 1, msg->workchain, msg->is_bounceable, msg->is_testnet_only, raw_address);
+  ton_get_address_from_public_key(node->public_key + 1, raw_address);
   ton_to_user_friendly(msg->workchain, (const char*)raw_address, msg->is_bounceable, msg->is_testnet_only, resp->address);
   
   if (msg->has_show_display && msg->show_display) {
