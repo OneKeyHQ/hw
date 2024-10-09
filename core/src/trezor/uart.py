@@ -371,3 +371,8 @@ def get_ble_hash() -> bytes:
 
 def is_ble_opened() -> bool:
     return BLE_ENABLED if BLE_ENABLED is not None else True
+
+
+def get_ble_con_status() -> None:
+    """Request to power off the device."""
+    BLE_CTRL.ctrl(0x81, 0x07)
