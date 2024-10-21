@@ -61,7 +61,8 @@ void ble_usart_init(void) {
   if (HAL_UART_Init(huart) != HAL_OK) {
     ensure(secfalse, "uart init failed");
   }
-
+  HAL_UARTEx_EnableFifoMode(huart);
+  HAL_UARTEx_SetRxFifoThreshold(huart, UART_RXFIFO_THRESHOLD_1_8);
   NVIC_SetPriority(UART4_IRQn, IRQ_PRI_UART);
   HAL_NVIC_EnableIRQ(UART4_IRQn);
 
