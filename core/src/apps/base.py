@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import storage.cache
 import storage.device
-from trezor import config, uart, ui, utils, wire, workflow
+from trezor import config, ui, utils, wire, workflow
 from trezor.enums import MessageType
 from trezor.messages import Success, UnlockPath
 
@@ -346,6 +346,7 @@ ALLOW_WHILE_LOCKED = (
 
 def set_homescreen() -> None:
     import lvgl as lv  # type: ignore[Import "lvgl" could not be resolved]
+    from trezor import uart
 
     ble_name = storage.device.get_ble_name()
     uart.get_ble_con_status()
