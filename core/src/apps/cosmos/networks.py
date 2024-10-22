@@ -371,3 +371,11 @@ def _networks_iterator() -> Iterator[NetworkInfo]:
         icon="A:/res/chain-tia.png",
         primary_color=0x802EF4,
     )
+    yield NetworkInfo(
+        chainId="kaiyo-1",
+        chainName="Kujira",
+        coinDenom="KUJI",
+        coinMinimalDenom="ukuji",
+        coinDecimals=6,
+        hrp="kujira",
+    )
