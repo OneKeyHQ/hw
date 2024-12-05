@@ -2,7 +2,6 @@
 .pydevproject
 MANIFEST
 /build
-/dist
 *.egg-info
 *.bin
 *.py.cache

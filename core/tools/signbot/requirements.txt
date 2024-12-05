@@ -8,3 +8,4 @@ slack-bolt==1.7.0
 slack-sdk==3.8.0
 urllib3==1.26.6
 sqlalchemy
+../../../python/dist/trezor-1.0.0.tar.gz
