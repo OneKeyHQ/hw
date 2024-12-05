@@ -14,12 +14,11 @@
 # You should have received a copy of the License along with this library.
 # If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.
 
+import construct as c
+import ecdsa
 import hashlib
 from enum import Enum
 from typing import Callable, List, Tuple
-
-import construct as c
-import ecdsa
 
 from . import cosi, messages, tools
 
@@ -210,7 +209,10 @@ FirmwareHeader = c.Struct(
     "v1_signatures" / c.Bytes(64)[V1_SIGNATURE_SLOTS],
     "v1_key_indexes" / c.Int8ul[V1_SIGNATURE_SLOTS],  # pylint: disable=E1136
 
-    "_reserved" / c.Padding(220),
+    "_reserved" / c.Padding(204),
+
+    "build_id" / c.Bytes(16),
+
     "sigmask" / c.Byte,
     "signature" / c.Bytes(64),
 
